@@ -1,0 +1,12 @@
+<p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="10000">
+  <p-menu [model]="menuItems" [popup]="false"></p-menu>
+</p-sidebar>
+
+<p-button
+  icon="pi pi-bars"
+  (click)="toggleSidebar()"
+  [rounded]="true"
+  [text]="true"
+  severity="secondary"
+  [ngStyle]="{'position': 'fixed', 'left': '16px', 'top': '80px', 'z-index': '40'}"
+></p-button>

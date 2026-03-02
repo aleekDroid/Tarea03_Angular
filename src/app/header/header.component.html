@@ -1,0 +1,19 @@
+<p-toolbar [ngStyle]="{'margin-bottom': '16px'}">
+  <ng-template pTemplate="left">
+    <h1 style="font-size: 24px; font-weight: bold; color: #1f2937; margin: 0;">ERP Aleek</h1>
+  </ng-template>
+
+  <ng-template pTemplate="right">
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <span style="font-size: 14px; color: #4b5563;">
+        Bienvenido, <strong>{{ currentUser?.email }}</strong>
+      </span>
+      <p-button
+        icon="pi pi-sign-out"
+        (click)="logout()"
+        severity="danger"
+        [text]="true"
+      ></p-button>
+    </div>
+  </ng-template>
+</p-toolbar>

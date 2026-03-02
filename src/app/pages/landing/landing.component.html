@@ -1,0 +1,75 @@
+<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #404145 0%, #abaaaf 100%);">
+  <div style="width: 100%; max-width: 1200px; padding: 20px;">
+    <p-card [style]="{'background': 'white', 'border-radius': '12px', 'box-shadow': '0 10px 40px rgba(0,0,0,0.1)'}">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+        <!-- Sección de contenido -->
+        <div>
+          <h1 style="font-size: 44px; font-weight: bold; color: #1f2937; margin: 0 0 20px 0; line-height: 1.2;">
+            ERP Aleek
+          </h1>
+          
+          <p style="font-size: 18px; color: #4b5563; margin: 0 0 30px 0; line-height: 1.6;">
+            Plataforma moderna construida con Angular 19 y PrimeNG. Diseño limpio, minimalista y modular para gestionar tu negocio.
+          </p>
+
+          <div style="display: flex; gap: 16px; margin-bottom: 30px;">
+            <p-button
+              label="Iniciar Sesión"
+              routerLink="/login"
+              [style]="{'padding': '12px 32px', 'font-size': '16px'}"
+            ></p-button>
+
+            <p-button
+              label="Registrarse"
+              routerLink="/register"
+              severity="secondary"
+              [style]="{'padding': '12px 32px', 'font-size': '16px'}"
+            ></p-button>
+          </div>
+
+        </div>
+
+        <!-- Sección de características -->
+        <div>
+          <h3 style="font-size: 24px; font-weight: bold; color: #1f2937; margin-bottom: 20px;">
+            Características
+          </h3>
+          
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <i class="pi pi-check-circle" style="color: #10b981; font-size: 24px; flex-shrink: 0; margin-top: 4px;"></i>
+              <div>
+                <p style="font-weight: 600; color: #1f2937; margin: 0;">Arquitectura Modular</p>
+                <p style="color: #6b7280; font-size: 14px; margin: 4px 0 0 0;">Componentes independientes y reutilizables</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <i class="pi pi-check-circle" style="color: #10b981; font-size: 24px; flex-shrink: 0; margin-top: 4px;"></i>
+              <div>
+                <p style="font-weight: 600; color: #1f2937; margin: 0;">Standalone Components</p>
+                <p style="color: #6b7280; font-size: 14px; margin: 4px 0 0 0;">Angular 19 con última tecnología</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <i class="pi pi-check-circle" style="color: #10b981; font-size: 24px; flex-shrink: 0; margin-top: 4px;"></i>
+              <div>
+                <p style="font-weight: 600; color: #1f2937; margin: 0;">Interfaz Limpia</p>
+                <p style="color: #6b7280; font-size: 14px; margin: 4px 0 0 0;">Basada en PrimeNG con diseño moderno</p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <i class="pi pi-check-circle" style="color: #10b981; font-size: 24px; flex-shrink: 0; margin-top: 4px;"></i>
+              <div>
+                <p style="font-weight: 600; color: #1f2937; margin: 0;">Escalable</p>
+                <p style="color: #6b7280; font-size: 14px; margin: 4px 0 0 0;">Preparada para integración con backend</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
