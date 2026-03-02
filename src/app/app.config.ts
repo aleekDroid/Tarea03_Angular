@@ -1,7 +1,7 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeuix/themes/aura';
+import Lara from '@primeuix/themes/lara';
 
 import { routes } from './app.routes';
 
@@ -11,9 +11,11 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: Lara,
         options: {
-          darkModeSelector: false
+          prefix: 'p',
+          darkModeSelector: '.dark-mode',
+          cssLayer: false
         }
       }
     })

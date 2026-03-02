@@ -1,0 +1,43 @@
+<div style="padding: 20px;">
+  <h1 style="color: #00d9ff; font-size: 36px; margin: 0 0 30px 0;">Profile</h1>
+  
+  <p-card>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">
+          Email
+        </label>
+        <div style="background: #f1f5f9; padding: 12px 16px; border-radius: 6px; color: #1e293b; font-size: 16px;">
+          {{ currentUser?.email || 'N/A' }}
+        </div>
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">
+          Estado
+        </label>
+        <div style="background: #f1f5f9; padding: 12px 16px; border-radius: 6px; color: #1e293b; font-size: 16px;">
+          Activo
+        </div>
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">
+          Rol
+        </label>
+        <div style="background: #f1f5f9; padding: 12px 16px; border-radius: 6px; color: #1e293b; font-size: 16px;">
+          Administrador
+        </div>
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">
+          Ultimo Acceso
+        </label>
+        <div style="background: #f1f5f9; padding: 12px 16px; border-radius: 6px; color: #1e293b; font-size: 16px;">
+          Hoy
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>
