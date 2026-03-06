@@ -1,57 +1,52 @@
-<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #3d515f 0%, #e0e7ff 100%);">
+<div class="auth-container">
+
   <p-toast></p-toast>
 
-  <p-card [style]="{'width': '400px'}">
+  <p-card class="auth-card">
+
     <ng-template pTemplate="header">
-      <div style="text-align: center; padding: 24px;">
-        <h2 style="font-size: 24px; font-weight: bold; color: #7b8ba1; margin: 0;">Iniciar Sesión</h2>
+      <div class="auth-header">
+        <h2>Iniciar Sesión</h2>
       </div>
     </ng-template>
 
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div>
-        <label style="display: block; font-size: 14px; font-weight: 500; color: #7b8ba1; margin-bottom: 8px;">
-          Email
-        </label>
-        <input
-          pInputText
-          [(ngModel)]="email"
-          type="email"
-          style="width: 100%;"
-          placeholder="Ingresa tu email"
-          [disabled]="loading"
-        />
-        <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Prueba: {{ testEmail }}</p>
+    <div class="auth-form">
+
+      <div class="p-field">
+        <label>Email</label>
+        <br>
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-envelope"></i>
+
+          <input pInputText [(ngModel)]="email" type="email" placeholder="correo@ejemplo.com" style="width:100%"
+            [disabled]="loading" />
+
+        </span>
       </div>
 
-      <div>
-        <label style="display: block; font-size: 14px; font-weight: 500; color: #7b8ba1; margin-bottom: 8px;">
-          Contraseña
-        </label>
-        <input
-          pInputText
-          [(ngModel)]="password"
-          type="password"
-          style="width: 100%;"
-          placeholder="admin123"
-          [disabled]="loading"
-        />
-        <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Prueba: {{ testPassword }}</p>
+
+      <div class="p-field">
+        <label>Contraseña</label>
+        <br>
+
+        <p-password [(ngModel)]="password" [feedback]="false" toggleMask="true" placeholder="Contraseña"
+          styleClass="w-full" [disabled]="loading"></p-password>
+
       </div>
 
-      <p-button
-        label="Iniciar Sesión"
-        (click)="login()"
-        [loading]="loading"
-        [style]="{'width': '100%'}"
-      ></p-button>
 
-      <p style="text-align: center; font-size: 14px; color: #7b8ba1;">
+      <p-button label="Iniciar Sesión" icon="pi pi-sign-in" (click)="login()" [loading]="loading"
+        styleClass="w-full"></p-button>
+
+
+      <p class="auth-link">
         ¿No tienes cuenta?
-        <a routerLink="/register" style="color: #4f46e5; text-decoration: none; font-weight: 500;">
-          Regístrate aquí
-        </a>
+        <a routerLink="/register">Regístrate</a>
       </p>
+
     </div>
+
   </p-card>
+
 </div>

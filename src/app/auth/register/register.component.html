@@ -1,69 +1,106 @@
-<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #e0f2fe 0%, #e0e7ff 100%);">
+<div class="auth-container">
+
   <p-toast></p-toast>
-  
-  <p-card [style]="{'width': '400px'}">
+
+  <p-card class="auth-card" [style]="{ width: '480px' }">
+
     <ng-template pTemplate="header">
-      <div style="text-align: center; padding: 24px;">
-        <h2 style="font-size: 24px; font-weight: bold; color: #1f2937; margin: 0;">Crear Cuenta</h2>
+      <div class="auth-header">
+        <h2>Crear Cuenta</h2>
       </div>
     </ng-template>
 
-    <div style="display: flex; flex-direction: column; gap: 16px;">
+    <div class="auth-form">
+
+      <!-- NOMBRES -->
       <div>
-        <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">
-          Email
-        </label>
-        <input
-          pInputText
-          [(ngModel)]="email"
-          type="email"
-          style="width: 100%;"
-          placeholder="tu@email.com"
-          [disabled]="loading"
-        />
+        <label>Nombres</label>
+        <input pInputText [(ngModel)]="nombres" placeholder="Nombres" style="width:100%" />
+      </div>
+
+      <!-- APELLIDOS -->
+      <div class="p-grid" style="display:flex; gap:10px">
+
+        <div style="flex:1">
+          <label>Apellido paterno</label>
+          <input pInputText [(ngModel)]="apellidoPaterno" placeholder="Apellido paterno" style="width:100%" />
+        </div>
+
+        <div style="flex:1">
+          <label>Apellido materno</label>
+          <input pInputText [(ngModel)]="apellidoMaterno" placeholder="Apellido materno" style="width:100%" />
+        </div>
+
+      </div>
+
+      <!-- EMAIL -->
+      <div>
+        <label>Email</label>
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-envelope"></i>
+
+          <input pInputText [(ngModel)]="email" type="email" placeholder="correo@ejemplo.com" style="width:100%" />
+
+        </span>
+      </div>
+
+      <!-- PASSWORD -->
+      <div>
+        <label>Contraseña</label>
+        <br>  
+
+        <p-password [(ngModel)]="password" toggleMask="true" placeholder="Contraseña" styleClass="w-full"></p-password>
+
       </div>
 
       <div>
-        <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">
-          Contraseña
-        </label>
-        <input
-          pInputText
-          [(ngModel)]="password"
-          type="password"
-          style="width: 100%;"
-          placeholder="••••••••"
-          [disabled]="loading"
-        />
+        <label>Confirmar contraseña</label>
+        <br>
+
+        <p-password [(ngModel)]="confirmPassword" toggleMask="true" [feedback]="false"
+          placeholder="Confirmar contraseña" styleClass="w-full"></p-password>
+
       </div>
 
+      <!-- TELEFONO -->
       <div>
-        <label style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px;">
-          Confirmar Contraseña
-        </label>
-        <input
-          pInputText
-          [(ngModel)]="confirmPassword"
-          type="password"
-          style="width: 100%;"
-          placeholder="••••••••"
-          [disabled]="loading"
-        />
+        <label>Teléfono</label>
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-phone"></i>
+
+          <input pInputText [(ngModel)]="telefono" placeholder="4421234567" style="width:100%" />
+
+        </span>
       </div>
 
-      <p-button
-        label="Registrarse"
-        (click)="register()"
-        [loading]="loading"
-        [style]="{'width': '100%'}"
-      ></p-button>
+      <!-- DIRECCION -->
+      <div>
+        <label>Dirección</label>
 
-      <p style="text-align: center; font-size: 14px; color: #4b5563;">
+        <input pInputText [(ngModel)]="direccion" placeholder="Dirección" style="width:100%" />
+
+      </div>
+
+      <!-- EDAD -->
+      <div>
+        <label>Edad</label>
+
+        <input pInputText [(ngModel)]="edad" type="number" placeholder="Edad" style="width:100%" />
+
+      </div>
+
+      <p-button label="Registrarse" icon="pi pi-user-plus" (click)="register()" [loading]="loading"
+        styleClass="w-full"></p-button>
+
+      <p class="auth-link">
         ¿Ya tienes cuenta?
-        <a routerLink="/login" style="color: #4f46e5; text-decoration: none; font-weight: 500;">
-          Inicia sesión
-        </a>
+        <a routerLink="/login">Inicia sesión</a>
       </p>
+
     </div>
+
   </p-card>
+
 </div>
