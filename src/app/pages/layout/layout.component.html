@@ -1,13 +1,21 @@
-<div style="display: flex; flex-direction: column; min-height: 100vh; background: linear-gradient(180deg, #f0f4f8 0%, #e8ecf1 100%);">
-  <app-header></app-header>
-  
-  <app-sidebar></app-sidebar>
+<div class="layout">
 
-  <div style="display: flex; flex: 1; margin-left: 280px; margin-top: 80px;">
-    <main style="flex: 1; padding: 24px; width: 100%; overflow-y: auto;">
+  <!-- HEADER -->
+  <app-header class="layout-header"></app-header>
+
+  <!-- SIDEBAR -->
+  <app-sidebar class="layout-sidebar"></app-sidebar>
+
+  <!-- CONTENT -->
+  <div class="layout-content">
+
+    <main class="layout-main">
       <router-outlet></router-outlet>
     </main>
+
+    <!-- FOOTER -->
+    <app-footer class="layout-footer"></app-footer>
+
   </div>
 
-  <app-footer></app-footer>
 </div>

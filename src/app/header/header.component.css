@@ -1,1 +1,8 @@
 /* Estilos específicos si es necesario */
+:host ::ng-deep .p-menubar {
+    border-radius: 0;
+}
+
+:host ::ng-deep .p-button-text {
+    padding: 4px 8px;
+}

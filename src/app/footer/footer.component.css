@@ -1,1 +1,19 @@
 /* Estilos específicos si es necesario */
+.footer {
+    border-radius: 0;
+    border-top: 1px solid #e5e5e5;
+    background: #fafafa;
+    font-size: 14px;
+}
+
+.footer-left {
+    font-weight: 500;
+}
+
+.footer-center {
+    opacity: 0.7;
+}
+
+.footer-right {
+    opacity: 0.6;
+}

@@ -1,0 +1,89 @@
+/* BOTÓN QUE ABRE SIDEBAR */
+
+.sidebar-toggle {
+  position: fixed;
+  top: 90px;
+  left: 16px;
+  z-index: 1000;
+}
+
+
+/* SIDEBAR */
+
+:host ::ng-deep .app-sidebar {
+  width: 260px;
+}
+
+
+/* HEADER APP */
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+
+/* MENU */
+
+.sidebar-menu {
+  border: none;
+  width: 100%;
+}
+
+
+/* SUBTÍTULOS */
+
+.submenu-header {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-color-secondary);
+  padding: 10px 16px;
+  display: block;
+}
+
+
+/* ITEMS */
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 16px;
+
+  border-radius: 6px;
+
+  text-decoration: none;
+
+  color: var(--text-color);
+
+  transition: background 0.2s;
+}
+
+
+/* HOVER */
+
+.menu-item:hover {
+  background: var(--primary-color);
+  color: white;
+}
+
+
+/* ITEM ACTIVO */
+
+.menu-item.active {
+  background: var(--primary-color);
+  color: black;
+}
+
+
+.menu-text {
+  font-size: 14px;
+}

@@ -1,39 +1,74 @@
-<header style="
-  background: linear-gradient(90deg, #0f172a 0%, #1a1f3a 100%);
-  border-bottom: 2px solid #00d9ff40;
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 50;
-  box-shadow: 0 4px 20px rgba(0, 217, 255, 0.1);
-">
-  <h1 style="
-    font-size: 20px;
-    font-weight: 700;
-    color: #00d9ff;
-    margin: 0;
-    letter-spacing: 0.5px;
-    text-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
-  "></h1>
+<p-menubar [model]="items">
 
-  <div style="display: flex; align-items: center; gap: 24px;">
-    <span style="
-      font-size: 13px;
-      color: #94a3b8;
-      letter-spacing: 0.3px;
-    ">
-      Bienvenido, <strong style="color: #cbd5e1;">{{ currentUser?.email }}</strong>
-    </span>
-    <p-button
-      icon="pi pi-sign-out"
-      (click)="logout()"
-      severity="secondary"
-      [text]="true"
-      styleClass="logout-btn"
-    ></p-button>
-  </div>
-</header>
+  <!-- Logo o espacio izquierdo -->
+<ng-template pTemplate="start">
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-bars"
+    label="Ver más"
+    class="p-button-text"
+    (click)="toggleNavMenu($event)">
+  </button>
+
+  <p-menu
+    #navMenu
+    [model]="navItems"
+    [popup]="true">
+  </p-menu>
+
+</ng-template>
+
+
+  <!-- Zona derecha -->
+  <ng-template pTemplate="end">
+
+    <div style="display:flex; align-items:center; gap:12px;">
+
+      <!-- BUSCADOR -->
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          type="text"
+          pInputText
+          placeholder="Buscar"
+          style="width:180px"
+        />
+      </span>
+
+
+      <!-- BOTÓN USUARIO -->
+      <button
+        pButton
+        type="button"
+        class="p-button-text"
+        (click)="toggleUserMenu($event)"
+        style="display:flex; align-items:center; gap:8px;"
+      >
+
+        <p-avatar
+          icon="pi pi-user"
+          shape="circle">
+        </p-avatar>
+
+        <span style="max-width:150px; overflow:hidden; text-overflow:ellipsis;">
+  {{ currentUser?.email }}
+</span>
+
+        <i class="pi pi-angle-down"></i>
+
+      </button>
+
+      <!-- MENÚ DESPLEGABLE -->
+      <p-menu
+        #userMenu
+        [model]="userMenuItems"
+        [popup]="true">
+      </p-menu>
+
+    </div>
+
+  </ng-template>
+
+</p-menubar>

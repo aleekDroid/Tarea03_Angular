@@ -1,0 +1,50 @@
+<!-- BOTÓN PARA ABRIR SIDEBAR -->
+
+<p-button
+  icon="pi pi-bars"
+  styleClass="sidebar-toggle"
+  (onClick)="sidebarVisible = true">
+</p-button>
+
+
+<!-- SIDEBAR -->
+
+<p-sidebar
+  [(visible)]="sidebarVisible"
+  position="left"
+  styleClass="app-sidebar"
+>
+
+  <!-- LOGO / NOMBRE APP -->
+
+  <div class="sidebar-header">
+    <h2>ERP Aleek</h2>
+  </div>
+
+  <!-- MENU -->
+
+  <p-menu [model]="items" styleClass="sidebar-menu">
+
+    <ng-template #submenuheader let-item>
+      <span class="submenu-header">
+        {{ item.label }}
+      </span>
+    </ng-template>
+
+    <ng-template #item let-item>
+      <a
+        pRipple
+        class="menu-item"
+        [routerLink]="item.routerLink"
+        routerLinkActive="active"
+      >
+        <span [class]="item.icon"></span>
+        <span class="menu-text">
+          {{ item.label }}
+        </span>
+      </a>
+    </ng-template>
+
+  </p-menu>
+
+</p-sidebar>
