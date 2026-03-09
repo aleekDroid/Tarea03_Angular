@@ -1,0 +1,64 @@
+<div class="dashboard">
+
+  <!-- KPI CARDS -->
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <h3>Usuarios</h3>
+      <p>{{stats.users}}</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Grupos</h3>
+      <p>{{stats.groups}}</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Tickets</h3>
+      <p>{{stats.tickets}}</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Activos</h3>
+      <p>{{stats.active}}</p>
+    </div>
+
+  </div>
+
+
+  <!-- CHARTS -->
+
+  <div class="charts-grid">
+
+    <div class="chart-card">
+      <h3>Tickets por estado</h3>
+      <div class="chart-container">
+        <p-chart type="doughnut" [data]="statusChart" [options]="chartOptions" styleClass="w-full h-full"></p-chart>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>Tickets por prioridad</h3>
+      <div class="chart-container">
+        <p-chart type="pie" [data]="priorityChart" [options]="chartOptions" styleClass="w-full h-full"></p-chart>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>Actividad semanal</h3>
+      <div class="chart-container">
+        <p-chart type="line" [data]="weeklyChart" [options]="chartOptions" styleClass="w-full h-full"></p-chart>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>Tickets por grupo</h3>
+      <div class="chart-container">
+        <p-chart type="bar" [data]="groupChart" [options]="chartOptions" styleClass="w-full h-full"></p-chart>
+      </div>
+    </div>
+
+  </div>
+
+</div>

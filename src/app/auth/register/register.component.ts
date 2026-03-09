@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-
 import { MessageService } from 'primeng/api';
-
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -19,11 +16,10 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
     CardModule,
-    ButtonModule,
     InputTextModule,
     PasswordModule,
+    ButtonModule,
     ToastModule
   ],
   providers: [MessageService],
@@ -32,27 +28,28 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegisterComponent {
 
-  nombres: string = '';
-  apellidoPaterno: string = '';
-  apellidoMaterno: string = '';
+  nombres = '';
+  apellidoPaterno = '';
+  apellidoMaterno = '';
+  email = '';
+  password = '';
+  confirmPassword = '';
+  telefono = '';
+  direccion = '';
+  edad: any = '';
 
-  email: string = '';
-  password: string = '';
-  confirmPassword: string = '';
-
-  telefono: string = '';
-  direccion: string = '';
-  edad: number | null = null;
-
-  loading: boolean = false;
+  loading = false;
 
   constructor(
-    private authService: AuthService,
     private router: Router,
     private messageService: MessageService
   ) {}
 
-  register(): void {
+  register() {
+
+    this.loading = true;
+
+    /* VALIDACIÓN CAMPOS VACÍOS */
 
     if (
       !this.nombres ||
@@ -65,89 +62,101 @@ export class RegisterComponent {
       !this.direccion ||
       !this.edad
     ) {
-
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Por favor completa todos los campos'
-      });
-
+      this.error('Todos los campos son obligatorios');
       return;
     }
+
+    /* VALIDAR QUE NOMBRES Y APELLIDOS NO TENGAN ESPACIOS */
+
+    const noSpacesRegex = /^[^\s]+$/;
+
+    if (!noSpacesRegex.test(this.nombres)) {
+      this.error('El nombre no puede contener espacios');
+      return;
+    }
+
+    if (!noSpacesRegex.test(this.apellidoPaterno)) {
+      this.error('El apellido paterno no puede contener espacios');
+      return;
+    }
+
+    if (!noSpacesRegex.test(this.apellidoMaterno)) {
+      this.error('El apellido materno no puede contener espacios');
+      return;
+    }
+
+    /* VALIDAR TELÉFONO (10 números exactos) */
+
+    const phoneRegex = /^[0-9]{10}$/;
+
+    if (!phoneRegex.test(this.telefono)) {
+      this.error('El teléfono debe tener exactamente 10 números');
+      return;
+    }
+
+    /* VALIDAR EDAD ENTERA */
+
+    if (!Number.isInteger(Number(this.edad))) {
+      this.error('La edad debe ser un número entero');
+      return;
+    }
+
+    /* VALIDAR PASSWORD */
 
     if (this.password !== this.confirmPassword) {
-
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Las contraseñas no coinciden'
-      });
-
+      this.error('Las contraseñas no coinciden');
       return;
     }
 
-    const user = {
+    /* VALIDAR EMAIL DUPLICADO */
 
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    const exists = users.find((u: any) => u.email === this.email);
+
+    if (exists) {
+      this.error('Ya existe una cuenta con este correo');
+      return;
+    }
+
+    /* CREAR USUARIO */
+
+    const newUser = {
       nombres: this.nombres,
       apellidoPaterno: this.apellidoPaterno,
       apellidoMaterno: this.apellidoMaterno,
-
       email: this.email,
       password: this.password,
-
       telefono: this.telefono,
       direccion: this.direccion,
-      edad: this.edad
-
+      edad: Number(this.edad)
     };
 
-    this.loading = true;
+    users.push(newUser);
 
-    this.authService.register(user).subscribe({
+    localStorage.setItem('users', JSON.stringify(users));
 
-      next: (response) => {
-
-        this.loading = false;
-
-        if (response.success) {
-
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Registro exitoso',
-            detail: response.message,
-            life: 2500
-          });
-
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 2000);
-
-        } else {
-
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: response.message
-          });
-
-        }
-
-      },
-
-      error: () => {
-
-        this.loading = false;
-
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Ocurrió un error en el registro'
-        });
-
-      }
-
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Registro exitoso',
+      detail: 'La cuenta fue creada correctamente'
     });
 
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 1200);
+
+    this.loading = false;
+  }
+
+  error(msg: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: msg
+    });
+
+    this.loading = false;
   }
 
 }

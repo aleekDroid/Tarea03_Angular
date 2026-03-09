@@ -1,21 +1,14 @@
 <div class="layout">
 
-  <!-- HEADER -->
-  <app-header class="layout-header"></app-header>
+  <app-header></app-header>
 
-  <!-- SIDEBAR -->
-  <app-sidebar class="layout-sidebar"></app-sidebar>
-
-  <!-- CONTENT -->
-  <div class="layout-content">
-
-    <main class="layout-main">
+  <div class="main">
+    <div class="content">
       <router-outlet></router-outlet>
-    </main>
-
-    <!-- FOOTER -->
-    <app-footer class="layout-footer"></app-footer>
+    </div>
 
   </div>
+
+  <app-footer></app-footer>
 
 </div>

@@ -1,0 +1,17 @@
+.kanban {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.kanban-column {
+    flex: 1;
+    background: #f4f6f8;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.kanban-column p-card {
+    display: block;
+    margin-bottom: 10px;
+}

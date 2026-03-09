@@ -1,15 +1,89 @@
-<div style="padding: 20px;">
-  <h1 style="color: #00d9ff; font-size: 36px; margin: 0 0 20px 0;">Total</h1>
-  
-  <div style="background: white; border-radius: 8px; padding: 40px; min-height: 200px; box-shadow: 0 2px 8px rgba(0, 217, 255, 0.1); margin-bottom: 40px;">
-    <!-- Contenido vacío para el total -->
+<p-toast></p-toast>
+
+<div class="card">
+
+  <div class="header">
+    <h2>Gestión de Grupos</h2>
+
+    <button pButton label="Nuevo Grupo" icon="pi pi-plus" (click)="openNew()">
+    </button>
   </div>
 
-  <h2 style="color: #00d9ff; font-size: 28px; margin: 0 0 20px 0;">Advances</h2>
-  
-  <p-card>
-    <div style="min-height: 250px; display: flex; align-items: center; justify-content: center; color: #94a3b8;">
-      <p>Aquí irán los avances</p>
-    </div>
-  </p-card>
+  <p-table [value]="groups" dataKey="id" [paginator]="true" [rows]="10" [showGridlines]="true"
+    responsiveLayout="scroll">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Nivel</th>
+        <th>Autor</th>
+        <th>Miembros</th>
+        <th>Tickets</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-group>
+
+      <tr>
+
+        <td>{{group.id}}</td>
+
+        <td>{{group.nombre}}</td>
+
+        <td>
+          <p-tag [value]="group.categoria" severity="info"></p-tag>
+        </td>
+
+        <td>
+          <p-tag [value]="group.nivel" severity="success"></p-tag>
+        </td>
+
+        <td>{{group.autor}}</td>
+
+        <td>{{group.miembros}}</td>
+
+        <td>{{group.tickets}}</td>
+
+        <td class="actions">
+
+          <button pButton icon="pi pi-ellipsis-v" (click)="menu.toggle($event)">
+          </button>
+
+          <p-menu #menu [popup]="true" [model]="getGroupMenu(group)">
+          </p-menu>
+
+        </td>
+
+      </tr>
+
+    </ng-template>
+
+  </p-table>
+
 </div>
+
+<p-dialog header="Grupo" [(visible)]="groupDialog" [modal]="true" [style]="{width:'400px'}">
+
+  <div class="form">
+
+    <input pInputText [(ngModel)]="selectedGroup.nombre" placeholder="Nombre">
+
+    <input pInputText [(ngModel)]="selectedGroup.categoria" placeholder="Categoría">
+
+    <input pInputText [(ngModel)]="selectedGroup.nivel" placeholder="Nivel">
+
+    <input pInputText [(ngModel)]="selectedGroup.autor" placeholder="Autor">
+
+    <input pInputText type="number" [(ngModel)]="selectedGroup.miembros" placeholder="Miembros">
+
+    <input pInputText type="number" [(ngModel)]="selectedGroup.tickets" placeholder="Tickets">
+
+    <button pButton label="Guardar" icon="pi pi-check" (click)="saveGroup()">
+    </button>
+
+  </div>
+
+</p-dialog>

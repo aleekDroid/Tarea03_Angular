@@ -6,6 +6,7 @@ import { LayoutComponent } from './pages/layout/layout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { GroupComponent } from './pages/group/group.component';
 import { UserComponent } from './pages/user/user.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -19,7 +20,25 @@ export const routes: Routes = [
     children: [
       { path: '', component: HomeComponent },
       { path: 'group', component: GroupComponent },
-      { path: 'user', component: UserComponent }
+      { path: 'user', component: UserComponent },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./pages/dashboard/dashboard.component')
+          .then(m => m.DashboardComponent)
+      },
+
+      {
+        path: 'group-view/:id',
+        loadComponent: () => import('./pages/group-view/group-view.component')
+          .then(m => m.GroupViewComponent)
+      },
+
+      {
+        path: 'group-users/:id',
+        loadComponent: () => import('./pages/group-users/group-users.component')
+          .then(m => m.GroupUsersComponent)
+      }
+
     ]
   },
   { path: '**', redirectTo: '' }

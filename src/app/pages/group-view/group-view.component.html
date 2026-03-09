@@ -1,0 +1,109 @@
+<div class="card">
+
+    <h2>Tickets del Grupo</h2>
+
+    <p-selectButton [options]="options" [(ngModel)]="viewMode">
+    </p-selectButton>
+
+    <br><br>
+
+    <p-table *ngIf="viewMode==='list'" [value]="tickets">
+
+        <ng-template pTemplate="header">
+
+            <tr>
+                <th>ID</th>
+                <th>Titulo</th>
+                <th>Estado</th>
+                <th>Prioridad</th>
+                <th>Asignado</th>
+                <th>Fecha creación</th>
+                <th>Fecha límite</th>
+                <th>Acciones</th>
+            </tr>
+
+        </ng-template>
+
+        <ng-template pTemplate="body" let-ticket>
+
+            <tr>
+
+                <td>{{ticket.id}}</td>
+
+                <td>{{ticket.titulo}}</td>
+
+                <td>{{ticket.estado}}</td>
+
+                <td>{{ticket.prioridad}}</td>
+
+                <td>{{ticket.asignadoA}}</td>
+
+                <td>{{ticket.fechaCreacion}}</td>
+
+                <td>{{ticket.fechaLimite}}</td>
+
+                <td>
+
+                    <button pButton icon="pi pi-eye" class="p-button-text">
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </ng-template>
+
+    </p-table>
+
+    <div *ngIf="viewMode==='kanban'" class="kanban">
+
+        <div class="kanban-column">
+
+            <h3>Pendiente</h3>
+
+            <p-card *ngFor="let t of pendientes">
+                <h4>{{t.titulo}}</h4>
+                <p>{{t.prioridad}}</p>
+            </p-card>
+
+        </div>
+
+
+        <div class="kanban-column">
+
+            <h3>En progreso</h3>
+
+            <p-card *ngFor="let t of enProgreso">
+                <h4>{{t.titulo}}</h4>
+                <p>{{t.prioridad}}</p>
+            </p-card>
+
+        </div>
+
+
+        <div class="kanban-column">
+
+            <h3>Revisión</h3>
+
+            <p-card *ngFor="let t of enProgreso">
+                <h4>{{t.titulo}}</h4>
+                <p>{{t.prioridad}}</p>
+            </p-card>
+
+        </div>
+
+
+        <div class="kanban-column">
+
+            <h3>Finalizado</h3>
+
+            <p-card *ngFor="let t of finalizados">
+                <h4>{{t.titulo}}</h4>
+                <p>{{t.prioridad}}</p>
+            </p-card>
+
+        </div>
+
+    </div>
+
+</div>
