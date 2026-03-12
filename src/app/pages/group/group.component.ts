@@ -8,7 +8,7 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { TagModule } from 'primeng/tag';
-import { MenuModule } from 'primeng/menu';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
@@ -28,7 +28,7 @@ import { GroupService } from '../../services/group.service';
     InputTextModule,
     ToastModule,
     TagModule,
-    MenuModule
+    OverlayPanelModule
   ],
   providers: [MessageService],
   templateUrl: './group.component.html',

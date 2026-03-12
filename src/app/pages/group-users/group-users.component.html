@@ -1,1 +1,41 @@
-<p>group-users works!</p>
+<div class="group-users">
+
+    <h2>Usuarios del grupo</h2>
+
+    <div class="add-user">
+
+        <p-dropdown [options]="users" optionLabel="nombre" [(ngModel)]="selectedUser" placeholder="Seleccionar usuario">
+        </p-dropdown>
+
+        <button pButton label="Agregar" icon="pi pi-plus" (click)="addUser()">
+        </button>
+
+    </div>
+
+    <p-table [value]="groupUsers">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-user>
+            <tr>
+
+                <td>{{user?.nombre}}</td>
+                <td>{{user?.email}}</td>
+
+                <td>
+                    <button pButton icon="pi pi-trash" severity="danger" (click)="removeUser(user)">
+                    </button>
+                </td>
+
+            </tr>
+        </ng-template>
+
+    </p-table>
+
+</div>

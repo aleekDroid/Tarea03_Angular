@@ -1,0 +1,11 @@
+.group-users {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+.add-user {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}

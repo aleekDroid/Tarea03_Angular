@@ -49,11 +49,17 @@
 
         <td class="actions">
 
-          <button pButton icon="pi pi-ellipsis-v" (click)="menu.toggle($event)">
+          <button pButton icon="pi pi-ellipsis-v" (click)="op.toggle($event)">
           </button>
 
-          <p-menu #menu [popup]="true" [model]="getGroupMenu(group)">
-          </p-menu>
+          <p-overlayPanel #op>
+            <ng-template pTemplate="content">
+              <div class="menu-items">
+                <button pButton label="Ver Tickets" icon="pi pi-ticket" (click)="openGroupTickets(group); op.hide()"></button>
+                <button pButton label="Gestionar Usuarios" icon="pi pi-users" (click)="manageGroup(group); op.hide()"></button>
+              </div>
+            </ng-template>
+          </p-overlayPanel>
 
         </td>
 
