@@ -1,13 +1,13 @@
 .kanban {
     display: flex;
+    flex-direction: column;
     gap: 30px;
     margin-top: 20px;
-    overflow-x: auto; /* Allow horizontal scroll if needed */
 }
 
 .kanban-column {
-    flex: 1;
-    min-width: 250px;
+    flex: none;
+    width: 100%;
     background: #f4f6f8;
     padding: 15px;
     border-radius: 6px;
@@ -28,4 +28,43 @@
 
 .kanban-column p-card:active {
     cursor: grabbing;
+}
+
+/* Ticket detail modal fixes */
+.ticket-details .p-dialog-content {
+  max-height: 70vh;
+  overflow: auto;
+  padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+}
+
+.ticket-details .field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.35rem !important;
+  margin-bottom: 1rem !important;
+  width: 100%;
+}
+
+.ticket-details .field label {
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.15rem;
+}
+
+.ticket-details .field input,
+.ticket-details .field textarea,
+.ticket-details .field .p-calendar,
+.ticket-details .field .p-selectbutton {
+  width: 100% !important;
+  min-width: 0;
+}
+
+.ticket-details .field textarea {
+  resize: vertical;
+}
+
+.ticket-details .p-dialog .p-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
 }

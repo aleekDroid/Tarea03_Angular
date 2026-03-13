@@ -85,6 +85,58 @@ export class TicketService {
       fechaLimite: new Date('2023-10-10'),
       comentarios: ['Importante para seguridad.'],
       historial: ['Creado el ticket.']
+    },
+    {
+      id: 7,
+      titulo: 'Implementar API de pagos',
+      descripcion: 'Desarrollar endpoints para procesamiento de pagos.',
+      estado: 'en progreso',
+      prioridad: 'alta',
+      asignadoA: 'Luis Martinez',
+      grupoId: 3,
+      fechaCreacion: new Date('2023-10-06'),
+      fechaLimite: new Date('2023-10-20'),
+      comentarios: ['En revisión con el equipo de finanzas.'],
+      historial: ['Asignado a Luis.', 'Estado a en progreso.']
+    },
+    {
+      id: 8,
+      titulo: 'Diseñar UI para dashboard',
+      descripcion: 'Crear mockups y prototipos para el nuevo dashboard.',
+      estado: 'revision',
+      prioridad: 'media',
+      asignadoA: 'Ana Rodriguez',
+      grupoId: 4,
+      fechaCreacion: new Date('2023-10-07'),
+      fechaLimite: new Date('2023-10-15'),
+      comentarios: ['Mockups listos para revisión.'],
+      historial: ['Trabajo completado, enviado a revisión.']
+    },
+    {
+      id: 9,
+      titulo: 'Configurar CI/CD',
+      descripcion: 'Automatizar despliegues con pipelines.',
+      estado: 'finalizado',
+      prioridad: 'alta',
+      asignadoA: 'Carlos Lopez',
+      grupoId: 5,
+      fechaCreacion: new Date('2023-09-25'),
+      fechaLimite: new Date('2023-10-05'),
+      comentarios: ['Pipelines funcionando correctamente.'],
+      historial: ['Configurado y probado.', 'Marcado como finalizado.']
+    },
+    {
+      id: 10,
+      titulo: 'Optimizar base de datos',
+      descripcion: 'Indexar tablas y mejorar queries.',
+      estado: 'pendiente',
+      prioridad: 'media',
+      asignadoA: 'Maria Garcia',
+      grupoId: 3,
+      fechaCreacion: new Date('2023-10-08'),
+      fechaLimite: new Date('2023-10-18'),
+      comentarios: ['Esperando análisis de rendimiento.'],
+      historial: ['Creado el ticket.']
     }
   ];
 

@@ -6,39 +6,35 @@ import { Group } from '../models/group.model';
 })
 export class GroupService {
 
-  private STORAGE_KEY = 'groups';
+  private groups: Group[] = [
+    { id: 1, nombre: 'Desarrollo Frontend', categoria: 'Frontend', nivel: 'Avanzado', autor: 'Admin', miembros: 10, tickets: 5 },
+    { id: 2, nombre: 'Desarrollo Backend', categoria: 'Backend', nivel: 'Intermedio', autor: 'Admin', miembros: 8, tickets: 2 },
+    { id: 3, nombre: 'Testing', categoria: 'QA', nivel: 'Intermedio', autor: 'Admin', miembros: 6, tickets: 3 },
+    { id: 4, nombre: 'DevOps', categoria: 'Infraestructura', nivel: 'Avanzado', autor: 'Admin', miembros: 4, tickets: 4 },
+    { id: 5, nombre: 'Diseño', categoria: 'UI/UX', nivel: 'Básico', autor: 'Admin', miembros: 5, tickets: 1 }
+  ];
 
-  constructor() {
-    if (!localStorage.getItem(this.STORAGE_KEY)) {
-      const initialData: Group[] = [
-        { id: 1, nombre: 'Angular Devs', categoria: 'Frontend', nivel: 'Avanzado', autor: 'Admin', miembros: 10, tickets: 5 },
-        { id: 2, nombre: 'Node Masters', categoria: 'Backend', nivel: 'Intermedio', autor: 'Admin', miembros: 8, tickets: 2 }
-      ];
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(initialData));
+  getGroups(): Group[] {
+    return this.groups;
+  }
+
+  getGroupById(id: number): Group | undefined {
+    return this.groups.find(g => g.id === id);
+  }
+
+  addGroup(group: Group): void {
+    const newId = Math.max(...this.groups.map(g => g.id)) + 1;
+    this.groups.push({ ...group, id: newId });
+  }
+
+  updateGroup(updated: Group): void {
+    const index = this.groups.findIndex(g => g.id === updated.id);
+    if (index !== -1) {
+      this.groups[index] = updated;
     }
   }
 
-  getGroups(): Group[] {
-    return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
-  }
-
-  saveGroups(groups: Group[]) {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(groups));
-  }
-
-  addGroup(group: Group) {
-    const groups = this.getGroups();
-    groups.push(group);
-    this.saveGroups(groups);
-  }
-
-  updateGroup(updated: Group) {
-    const groups = this.getGroups().map(g => g.id === updated.id ? updated : g);
-    this.saveGroups(groups);
-  }
-
-  deleteGroup(id: number) {
-    const groups = this.getGroups().filter(g => g.id !== id);
-    this.saveGroups(groups);
+  deleteGroup(id: number): void {
+    this.groups = this.groups.filter(g => g.id !== id);
   }
 }

@@ -61,4 +61,173 @@
 
   </div>
 
+  <!-- TICKETS SECTION -->
+
+  <div class="tickets-section">
+
+    <br>
+    <h2>Tickets</h2>
+
+    <div class="controls">
+
+      <p-dropdown [options]="groups" [(ngModel)]="selectedGroup" optionLabel="nombre" (onChange)="onGroupChange()"></p-dropdown>
+     
+      <button pButton *ngIf="authService.hasPermission('edit_ticket')" label="Nuevo Ticket" (click)="createTicket()"></button>
+
+    </div>
+    <br>
+    <p-table [value]="tickets">
+
+      <ng-template pTemplate="header">
+
+        <tr>
+
+          <th>ID</th>
+
+          <th>Título</th>
+
+          <th>Estado</th>
+
+          <th>Prioridad</th>
+
+          <th>Asignado</th>
+
+          <th>Fecha creación</th>
+
+          <th>Fecha límite</th>
+
+          <th>Acciones</th>
+
+        </tr>
+
+      </ng-template>
+
+      <ng-template pTemplate="body" let-ticket>
+
+        <tr>
+
+          <td>{{ticket.id}}</td>
+
+          <td>{{ticket.titulo}}</td>
+
+          <td>{{ticket.estado}}</td>
+
+          <td>{{ticket.prioridad}}</td>
+
+          <td>{{ticket.asignadoA}}</td>
+
+          <td>{{ticket.fechaCreacion | date:'dd-MM-yyyy'}}</td>
+
+          <td>{{ticket.fechaLimite | date:'dd-MM-yyyy'}}</td>
+
+          <td>
+
+            <button pButton icon="pi pi-eye" class="p-button-text success" (click)="openTicketDialog(ticket)"></button>
+
+          </td>
+
+        </tr>
+
+      </ng-template>
+
+    </p-table>
+
+  </div>
+
 </div>
+
+<p-dialog [(visible)]="displayDialog" header="Detalles del Ticket" modal="true" styleClass="p-fluid ticket-details">
+
+  <div *ngIf="selectedTicket">
+
+    <div class="field">
+
+      <label for="titulo">Título</label>
+
+      <input pInputText id="titulo" [(ngModel)]="selectedTicket.titulo" [disabled]="!canEditTicket(selectedTicket)" />
+
+    </div>
+
+    <div class="field">
+
+      <label for="descripcion">Descripción</label>
+
+      <textarea pInputTextarea id="descripcion" [(ngModel)]="selectedTicket.descripcion" rows="3" [disabled]="!canEditTicket(selectedTicket)"></textarea>
+
+    </div>
+
+    <div class="field">
+
+      <label for="estado">Estado</label>
+
+      <p-selectButton [options]="estados" [(ngModel)]="selectedTicket.estado" [disabled]="!canEditTicket(selectedTicket)"></p-selectButton>
+
+    </div>
+
+    <div class="field">
+
+      <label for="prioridad">Prioridad</label>
+
+      <p-selectButton [options]="prioridades" [(ngModel)]="selectedTicket.prioridad" [disabled]="!canEditTicket(selectedTicket)"></p-selectButton>
+
+    </div>
+
+    <div class="field">
+
+      <label for="asignadoA">Asignado a</label>
+
+      <input pInputText id="asignadoA" [(ngModel)]="selectedTicket.asignadoA" [disabled]="!authService.hasPermission('edit_ticket')" />
+
+    </div>
+
+    <div class="field">
+
+      <label for="fechaCreacion">Fecha creación</label>
+
+      <p-calendar [(ngModel)]="selectedTicket.fechaCreacion" [disabled]="true"></p-calendar>
+
+    </div>
+
+    <div class="field">
+
+      <label for="fechaLimite">Fecha límite</label>
+
+      <p-calendar [(ngModel)]="selectedTicket.fechaLimite" [disabled]="!canEditTicket(selectedTicket)"></p-calendar>
+
+    </div>
+
+    <div class="field">
+
+      <label>Comentarios</label>
+
+      <ul>
+
+        <li *ngFor="let c of selectedTicket.comentarios">{{c}}</li>
+
+      </ul>
+
+    </div>
+
+    <div class="field">
+
+      <label>Historial</label>
+
+      <ul>
+
+        <li *ngFor="let h of selectedTicket.historial">{{h}}</li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+  <ng-template pTemplate="footer">
+
+    <button pButton label="Guardar" (click)="saveTicket()" *ngIf="canEditTicket(selectedTicket!)"></button>
+
+    <button pButton label="Cerrar" (click)="displayDialog=false" class="p-button-secondary"></button>
+
+  </ng-template>
+
+</p-dialog>

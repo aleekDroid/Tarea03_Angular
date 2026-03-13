@@ -3,7 +3,6 @@ padding:20px;
 max-width:1100px;
 margin:auto;
 }
-
 /* KPI cards */
 
 .stats-grid{
@@ -75,3 +74,43 @@ display:flex;
   width:100% !important;
   height:100% !important;
 }
+
+/* Ticket detail modal fixes */
+.ticket-details .p-dialog-content {
+  max-height: 70vh;
+  overflow: auto;
+  padding: 1.25rem 1.5rem 1.25rem 1.5rem;
+}
+
+.ticket-details .field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.35rem !important;
+  margin-bottom: 1rem !important;
+  width: 100%;
+}
+
+.ticket-details .field label {
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.15rem;
+}
+
+.ticket-details .field input,
+.ticket-details .field textarea,
+.ticket-details .field .p-calendar,
+.ticket-details .field .p-selectbutton {
+  width: 100% !important;
+  min-width: 0;
+}
+
+.ticket-details .field textarea {
+  resize: vertical;
+}
+
+.ticket-details .p-dialog .p-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+

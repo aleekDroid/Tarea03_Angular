@@ -7,10 +7,16 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextarea } from 'primeng/inputtextarea';
+import { CalendarModule } from 'primeng/calendar';
 import { DragDropModule, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 
 import { TicketService } from '../../services/ticket.service';
 import { Ticket } from '../../models/ticket.model';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-group-view',
@@ -22,7 +28,11 @@ import { Ticket } from '../../models/ticket.model';
     SelectButtonModule,
     FormsModule,
     CardModule,
-    DragDropModule
+    DragDropModule,
+    DialogModule,
+    InputTextModule,
+    InputTextarea,
+    CalendarModule
   ],
   templateUrl: './group-view.component.html'
 })
@@ -31,6 +41,8 @@ export class GroupViewComponent implements OnInit {
   groupId!: number
 
   tickets: Ticket[] = [];
+
+  filteredTickets: Ticket[] = [];
 
   pendientes: Ticket[] = [];
   enProgreso: Ticket[] = [];
@@ -44,14 +56,43 @@ export class GroupViewComponent implements OnInit {
     { label: 'Kanban', value: 'kanban' }
   ]
 
+  filters = [
+    { label: 'Todos', value: 'all' },
+    { label: 'Mis tickets', value: 'mine' },
+    { label: 'Sin asignar', value: 'unassigned' },
+    { label: 'Prioridad alta', value: 'high' }
+  ];
+
+  selectedFilter = 'all';
+
+  displayDialog = false;
+  selectedTicket: Ticket | null = null;
+
+  prioridades = [
+    { label: 'Baja', value: 'baja' },
+    { label: 'Media', value: 'media' },
+    { label: 'Alta', value: 'alta' }
+  ];
+
+  estados = [
+    { label: 'Pendiente', value: 'pendiente' },
+    { label: 'En progreso', value: 'en progreso' },
+    { label: 'Revisión', value: 'revision' },
+    { label: 'Finalizado', value: 'finalizado' }
+  ];
+
   constructor(
     private route: ActivatedRoute,
-    private ticketService: TicketService
+    private ticketService: TicketService,
+    public authService: AuthService,
+    private userService: UserService
   ) { }
 
   loadTickets() {
 
     this.tickets = this.ticketService.getTicketsByGroup(this.groupId)
+
+    this.applyFilter();
 
     this.separarTickets()
 
@@ -59,13 +100,13 @@ export class GroupViewComponent implements OnInit {
 
   separarTickets() {
 
-    this.pendientes = this.tickets.filter(t => t.estado === 'pendiente')
+    this.pendientes = this.filteredTickets.filter(t => t.estado === 'pendiente')
 
-    this.enProgreso = this.tickets.filter(t => t.estado === 'en progreso')
+    this.enProgreso = this.filteredTickets.filter(t => t.estado === 'en progreso')
 
-    this.revision = this.tickets.filter(t => t.estado === 'revision')
+    this.revision = this.filteredTickets.filter(t => t.estado === 'revision')
 
-    this.finalizados = this.tickets.filter(t => t.estado === 'finalizado')
+    this.finalizados = this.filteredTickets.filter(t => t.estado === 'finalizado')
 
   }
 
@@ -78,6 +119,8 @@ export class GroupViewComponent implements OnInit {
   }
 
   onDrop(event: CdkDragDrop<Ticket[]>) {
+    if (!this.authService.hasPermission('move_kanban')) return;
+
     if (event.previousContainer === event.container) {
       // Same list, do nothing or reorder if needed
       return;
@@ -106,4 +149,45 @@ export class GroupViewComponent implements OnInit {
     }
   }
 
+  applyFilter() {
+    const currentUser = this.authService.getCurrentUser();
+    switch (this.selectedFilter) {
+      case 'mine':
+        this.filteredTickets = this.tickets.filter(t => currentUser && t.asignadoA === currentUser.name);
+        break;
+      case 'unassigned':
+        this.filteredTickets = this.tickets.filter(t => !t.asignadoA);
+        break;
+      case 'high':
+        this.filteredTickets = this.tickets.filter(t => t.prioridad === 'alta');
+        break;
+      default:
+        this.filteredTickets = [...this.tickets];
+    }
+  }
+
+  onFilterChange() {
+    this.applyFilter();
+    this.separarTickets();
+  }
+
+  openTicketDialog(ticket: Ticket) {
+    this.selectedTicket = { ...ticket };
+    this.displayDialog = true;
+  }
+
+  saveTicket() {
+    if (this.selectedTicket) {
+      this.ticketService.updateTicket(this.selectedTicket);
+      this.loadTickets();
+      this.displayDialog = false;
+    }
+  }
+
+  canEditTicket(ticket: Ticket): boolean {
+    const currentUser = this.authService.getCurrentUser();
+    const hasEditPermission = this.authService.hasPermission('edit_ticket');
+    const isAssigned = currentUser && ticket.asignadoA === currentUser.name;
+    return !!hasEditPermission || !!isAssigned;
+  }
 }
