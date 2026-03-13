@@ -7,8 +7,10 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { DragDropModule, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 
 import { TicketService } from '../../services/ticket.service';
+import { Ticket } from '../../models/ticket.model';
 
 @Component({
   selector: 'app-group-view',
@@ -19,7 +21,8 @@ import { TicketService } from '../../services/ticket.service';
     ButtonModule,
     SelectButtonModule,
     FormsModule,
-    CardModule
+    CardModule,
+    DragDropModule
   ],
   templateUrl: './group-view.component.html'
 })
@@ -27,12 +30,12 @@ export class GroupViewComponent implements OnInit {
 
   groupId!: number
 
-  tickets: any[] = [];
+  tickets: Ticket[] = [];
 
-  pendientes: any[] = [];
-  enProgreso: any[] = [];
-  revision: any[] = [];
-  finalizados: any[] = [];
+  pendientes: Ticket[] = [];
+  enProgreso: Ticket[] = [];
+  revision: Ticket[] = [];
+  finalizados: Ticket[] = [];
 
   viewMode = 'list'
 
@@ -72,6 +75,35 @@ export class GroupViewComponent implements OnInit {
 
     this.loadTickets()
 
+  }
+
+  onDrop(event: CdkDragDrop<Ticket[]>) {
+    if (event.previousContainer === event.container) {
+      // Same list, do nothing or reorder if needed
+      return;
+    } else {
+      // Transfer to new list
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+      // Update the ticket's estado
+      const ticket = event.container.data[event.currentIndex];
+      const estadoMap: Record<string, Ticket['estado']> = {
+        pendientes: 'pendiente',
+        enProgreso: 'en progreso',
+        revision: 'revision',
+        finalizados: 'finalizado'
+      };
+
+      const newEstado = estadoMap[event.container.id];
+      if (newEstado) {
+        ticket.estado = newEstado;
+        this.ticketService.updateTicket(ticket);
+      }
+    }
   }
 
 }

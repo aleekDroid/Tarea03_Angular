@@ -1,9 +1,8 @@
-<div class="card">
+﻿<div class="card">
 
     <h2>Tickets del Grupo</h2>
 
-    <p-selectButton [options]="options" [(ngModel)]="viewMode">
-    </p-selectButton>
+    <p-selectButton [options]="options" [(ngModel)]="viewMode"></p-selectButton>
 
     <br><br>
 
@@ -38,14 +37,13 @@
 
                 <td>{{ticket.asignadoA}}</td>
 
-                <td>{{ticket.fechaCreacion}}</td>
+                <td>{{ticket.fechaCreacion | date:'dd-MM-yyyy'}}</td>
 
-                <td>{{ticket.fechaLimite}}</td>
+                <td>{{ticket.fechaLimite | date:'dd-MM-yyyy'}}</td>
 
                 <td>
 
-                    <button pButton icon="pi pi-eye" class="p-button-text">
-                    </button>
+                    <button pButton icon="pi pi-eye" class="p-button-text"></button>
 
                 </td>
 
@@ -55,51 +53,59 @@
 
     </p-table>
 
-    <div *ngIf="viewMode==='kanban'" class="kanban">
+    <div *ngIf="viewMode==='kanban'" class="kanban" cdkDropListGroup>
 
-        <div class="kanban-column">
+        <div class="kanban-column" cdkDropList id="pendientes" [cdkDropListData]="pendientes" (cdkDropListDropped)="onDrop($event)">
 
             <h3>Pendiente</h3>
 
-            <p-card *ngFor="let t of pendientes">
+            <p-card *ngFor="let t of pendientes" cdkDrag>
                 <h4>{{t.titulo}}</h4>
                 <p>{{t.prioridad}}</p>
+                <p>Asignado: {{t.asignadoA}}</p>
+                <p>Límite: {{t.fechaLimite | date:'dd-MM-yyyy'}}</p>
             </p-card>
 
         </div>
 
 
-        <div class="kanban-column">
+        <div class="kanban-column" cdkDropList id="enProgreso" [cdkDropListData]="enProgreso" (cdkDropListDropped)="onDrop($event)">
 
             <h3>En progreso</h3>
 
-            <p-card *ngFor="let t of enProgreso">
+            <p-card *ngFor="let t of enProgreso" cdkDrag>
                 <h4>{{t.titulo}}</h4>
                 <p>{{t.prioridad}}</p>
+                <p>Asignado: {{t.asignadoA}}</p>
+                <p>Límite: {{t.fechaLimite | date:'dd-MM-yyyy'}}</p>
             </p-card>
 
         </div>
 
 
-        <div class="kanban-column">
+        <div class="kanban-column" cdkDropList id="revision" [cdkDropListData]="revision" (cdkDropListDropped)="onDrop($event)">
 
             <h3>Revisión</h3>
 
-            <p-card *ngFor="let t of enProgreso">
+            <p-card *ngFor="let t of revision" cdkDrag>
                 <h4>{{t.titulo}}</h4>
                 <p>{{t.prioridad}}</p>
+                <p>Asignado: {{t.asignadoA}}</p>
+                <p>Límite: {{t.fechaLimite | date:'dd-MM-yyyy'}}</p>
             </p-card>
 
         </div>
 
 
-        <div class="kanban-column">
+        <div class="kanban-column" cdkDropList id="finalizados" [cdkDropListData]="finalizados" (cdkDropListDropped)="onDrop($event)">
 
             <h3>Finalizado</h3>
 
-            <p-card *ngFor="let t of finalizados">
+            <p-card *ngFor="let t of finalizados" cdkDrag>
                 <h4>{{t.titulo}}</h4>
                 <p>{{t.prioridad}}</p>
+                <p>Asignado: {{t.asignadoA}}</p>
+                <p>Límite: {{t.fechaLimite | date:'dd-MM-yyyy'}}</p>
             </p-card>
 
         </div>
