@@ -7,8 +7,13 @@ export interface User {
   email: string;
   password: string;
   name: string;
+  apellido?: string;
+  telefono?: string;
+  edad?: number;
+  direccion?: string;
   permissions: string[];
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -46,72 +51,112 @@ export class UserService {
     },
     {
       id: 5,
-      email: 'usuario1@gmail.com',
+      email: 'juan.perez@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 1',
+      name: 'Juan',
+      apellido: 'Pérez',
+      telefono: '555-1234',
+      edad: 28,
+      direccion: 'Calle Ficticia 123, Ciudad',
       permissions: ['view', 'edit_profile']
     },
     {
       id: 6,
-      email: 'usuario2@gmail.com',
+      email: 'maria.garcia@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 2',
+      name: 'María',
+      apellido: 'García',
+      telefono: '555-5678',
+      edad: 32,
+      direccion: 'Avenida Imaginaria 456, Ciudad',
       permissions: ['view', 'edit_profile']
     },
     {
       id: 7,
-      email: 'usuario3@gmail.com',
+      email: 'carlos.lopez@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 3',
+      name: 'Carlos',
+      apellido: 'López',
+      telefono: '555-9012',
+      edad: 25,
+      direccion: 'Plaza Central 789, Ciudad',
       permissions: ['view', 'move_kanban', 'edit_profile']
     },
     {
       id: 8,
-      email: 'usuario4@gmail.com',
+      email: 'ana.rodriguez@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 4',
+      name: 'Ana',
+      apellido: 'Rodríguez',
+      telefono: '555-3456',
+      edad: 29,
+      direccion: 'Boulevard Nuevo 101, Ciudad',
       permissions: ['view', 'edit_profile']
     },
     {
       id: 9,
-      email: 'usuario5@gmail.com',
+      email: 'luis.martinez@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 5',
+      name: 'Luis',
+      apellido: 'Martínez',
+      telefono: '555-7890',
+      edad: 35,
+      direccion: 'Calle Antigua 202, Ciudad',
       permissions: ['view', 'move_kanban', 'edit_profile']
     },
     {
       id: 10,
-      email: 'usuario6@gmail.com',
+      email: 'sofia.ramirez@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 6',
+      name: 'Sofía',
+      apellido: 'Ramírez',
+      telefono: '555-1111',
+      edad: 27,
+      direccion: 'Avenida Moderna 303, Ciudad',
       permissions: ['view', 'edit_profile']
     },
     {
       id: 11,
-      email: 'usuario7@gmail.com',
+      email: 'pedro.sanchez@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 7',
+      name: 'Pedro',
+      apellido: 'Sánchez',
+      telefono: '555-2222',
+      edad: 31,
+      direccion: 'Plaza Vieja 404, Ciudad',
       permissions: ['view', 'edit_profile']
     },
     {
       id: 12,
-      email: 'usuario8@gmail.com',
+      email: 'laura.fernandez@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 8',
+      name: 'Laura',
+      apellido: 'Fernández',
+      telefono: '555-3333',
+      edad: 26,
+      direccion: 'Calle Nueva 505, Ciudad',
       permissions: ['view', 'edit_profile']
     },
     {
       id: 13,
-      email: 'usuario9@gmail.com',
+      email: 'diego.gonzalez@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 9',
+      name: 'Diego',
+      apellido: 'González',
+      telefono: '555-4444',
+      edad: 30,
+      direccion: 'Boulevard Antiguo 606, Ciudad',
       permissions: ['view', 'move_kanban', 'edit_profile']
     },
     {
       id: 14,
-      email: 'usuario10@gmail.com',
+      email: 'carmen.torres@gmail.com',
       password: 'usuario123',
-      name: 'Usuario 10',
+      name: 'Carmen',
+      apellido: 'Torres',
+      telefono: '555-5555',
+      edad: 33,
+      direccion: 'Avenida Clásica 707, Ciudad',
       permissions: ['view', 'edit_profile']
     }
   ];
