@@ -59,7 +59,7 @@
 
     <div *ngIf="viewMode==='kanban'" class="kanban" cdkDropListGroup>
 
-        <div class="kanban-column" cdkDropList id="pendientes" [cdkDropListData]="pendientes" [cdkDropListConnectedTo]="['enProgreso','revision','finalizados']" (cdkDropListDropped)="onDrop($event)">
+        <div class="kanban-column" cdkDropList id="pendientes" [cdkDropListData]="pendientes" (cdkDropListDropped)="onDrop($event)">
 
             <h3>Pendiente</h3>
 
@@ -73,7 +73,7 @@
         </div>
 
 
-        <div class="kanban-column" cdkDropList id="enProgreso" [cdkDropListData]="enProgreso" [cdkDropListConnectedTo]="['pendientes','revision','finalizados']" (cdkDropListDropped)="onDrop($event)">
+        <div class="kanban-column" cdkDropList id="enProgreso" [cdkDropListData]="enProgreso" (cdkDropListDropped)="onDrop($event)">
 
             <h3>En progreso</h3>
 
@@ -87,7 +87,7 @@
         </div>
 
 
-        <div class="kanban-column" cdkDropList id="revision" [cdkDropListData]="revision" [cdkDropListConnectedTo]="['pendientes','enProgreso','finalizados']" (cdkDropListDropped)="onDrop($event)">
+        <div class="kanban-column" cdkDropList id="revision" [cdkDropListData]="revision" (cdkDropListDropped)="onDrop($event)">
 
             <h3>Revisión</h3>
 
@@ -101,7 +101,7 @@
         </div>
 
 
-        <div class="kanban-column" cdkDropList id="finalizados" [cdkDropListData]="finalizados" [cdkDropListConnectedTo]="['pendientes','enProgreso','revision']" (cdkDropListDropped)="onDrop($event)">
+        <div class="kanban-column" cdkDropList id="finalizados" [cdkDropListData]="finalizados" (cdkDropListDropped)="onDrop($event)">
 
             <h3>Finalizado</h3>
 
@@ -118,7 +118,7 @@
 
 </div>
 
-<p-dialog [(visible)]="displayDialog" header="Detalles del Ticket" modal="true" styleClass="p-fluid ticket-details">
+<p-dialog [(visible)]="displayDialog" header="Detalles del Ticket" modal="true" styleClass="p-fluid ticket-details" [style]="{'width': '600px', 'max-width': '90vw'}">
 
   <div *ngIf="selectedTicket">
 

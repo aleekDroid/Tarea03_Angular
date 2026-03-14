@@ -36,6 +36,83 @@ export class UserService {
       password: 'empleado123',
       name: 'Empleado',
       permissions: ['view', 'move_kanban', 'edit_profile']
+    },
+    {
+      id: 4,
+      email: 'empleado2@gmail.com',
+      password: 'empleado2123',
+      name: 'Empleado (Crea Grupos)',
+      permissions: ['view', 'move_kanban', 'create_group', 'edit_profile']
+    },
+    {
+      id: 5,
+      email: 'usuario1@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 1',
+      permissions: ['view', 'edit_profile']
+    },
+    {
+      id: 6,
+      email: 'usuario2@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 2',
+      permissions: ['view', 'edit_profile']
+    },
+    {
+      id: 7,
+      email: 'usuario3@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 3',
+      permissions: ['view', 'move_kanban', 'edit_profile']
+    },
+    {
+      id: 8,
+      email: 'usuario4@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 4',
+      permissions: ['view', 'edit_profile']
+    },
+    {
+      id: 9,
+      email: 'usuario5@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 5',
+      permissions: ['view', 'move_kanban', 'edit_profile']
+    },
+    {
+      id: 10,
+      email: 'usuario6@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 6',
+      permissions: ['view', 'edit_profile']
+    },
+    {
+      id: 11,
+      email: 'usuario7@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 7',
+      permissions: ['view', 'edit_profile']
+    },
+    {
+      id: 12,
+      email: 'usuario8@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 8',
+      permissions: ['view', 'edit_profile']
+    },
+    {
+      id: 13,
+      email: 'usuario9@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 9',
+      permissions: ['view', 'move_kanban', 'edit_profile']
+    },
+    {
+      id: 14,
+      email: 'usuario10@gmail.com',
+      password: 'usuario123',
+      name: 'Usuario 10',
+      permissions: ['view', 'edit_profile']
     }
   ];
 

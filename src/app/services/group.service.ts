@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Group } from '../models/group.model';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
+  constructor(private userService: UserService) {}
+
+  private canModifyGroups(): boolean {
+    return this.userService.hasPermission('create_group');
+  }
 
   private groups: Group[] = [
     { id: 1, nombre: 'Desarrollo Frontend', categoria: 'Frontend', nivel: 'Avanzado', autor: 'Admin', miembros: 10, tickets: 5 },
@@ -23,11 +29,13 @@ export class GroupService {
   }
 
   addGroup(group: Group): void {
+    if (!this.canModifyGroups()) return;
     const newId = Math.max(...this.groups.map(g => g.id)) + 1;
     this.groups.push({ ...group, id: newId });
   }
 
   updateGroup(updated: Group): void {
+    if (!this.canModifyGroups()) return;
     const index = this.groups.findIndex(g => g.id === updated.id);
     if (index !== -1) {
       this.groups[index] = updated;
@@ -35,6 +43,7 @@ export class GroupService {
   }
 
   deleteGroup(id: number): void {
+    if (!this.canModifyGroups()) return;
     this.groups = this.groups.filter(g => g.id !== id);
   }
 }

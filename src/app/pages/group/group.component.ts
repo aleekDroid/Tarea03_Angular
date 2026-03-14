@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
 
+import { AuthService } from '../../services/auth.service';
 import { Group } from '../../models/group.model';
 import { GroupService } from '../../services/group.service';
 
@@ -44,7 +45,8 @@ export class GroupComponent implements OnInit {
   constructor(
     private groupService: GroupService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    public authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -68,6 +70,7 @@ export class GroupComponent implements OnInit {
   }
 
   openNew() {
+    if (!this.authService.hasPermission('create_group')) return;
     this.selectedGroup = this.emptyGroup();
     this.groupDialog = true;
   }
@@ -82,6 +85,7 @@ export class GroupComponent implements OnInit {
     if (!this.selectedGroup.nombre) return;
 
     if (this.selectedGroup.id === 0) {
+      if (!this.authService.hasPermission('create_group')) return;
       this.selectedGroup.id = Date.now();
       this.groupService.addGroup(this.selectedGroup);
 
@@ -107,6 +111,7 @@ export class GroupComponent implements OnInit {
   }
 
   deleteGroup(group: Group) {
+    if (!this.authService.hasPermission('create_group')) return;
 
     this.groupService.deleteGroup(group.id);
 

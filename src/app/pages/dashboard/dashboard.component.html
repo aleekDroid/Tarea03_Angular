@@ -136,7 +136,7 @@
 
 </div>
 
-<p-dialog [(visible)]="displayDialog" header="Detalles del Ticket" modal="true" styleClass="p-fluid ticket-details">
+<p-dialog [(visible)]="displayDialog" header="Detalles del Ticket" modal="true" styleClass="p-fluid ticket-details" [style]="{'width': '600px', 'max-width': '90vw'}">
 
   <div *ngIf="selectedTicket">
 

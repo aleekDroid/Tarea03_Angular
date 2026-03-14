@@ -2,9 +2,9 @@
 
     <h2>Usuarios del grupo</h2>
 
-    <div class="add-user">
+    <div class="add-user" *ngIf="authService.hasPermission('manage_users')">
 
-        <p-dropdown [options]="users" optionLabel="nombre" [(ngModel)]="selectedUser" placeholder="Seleccionar usuario">
+        <p-dropdown [options]="users" optionLabel="name" [(ngModel)]="selectedUser" placeholder="Seleccionar usuario">
         </p-dropdown>
 
         <button pButton label="Agregar" icon="pi pi-plus" (click)="addUser()">
@@ -25,10 +25,10 @@
         <ng-template pTemplate="body" let-user>
             <tr>
 
-                <td>{{user?.nombre}}</td>
+                <td>{{user?.name}}</td>
                 <td>{{user?.email}}</td>
 
-                <td>
+                <td *ngIf="authService.hasPermission('manage_users')">
                     <button pButton icon="pi pi-trash" severity="danger" (click)="removeUser(user)">
                     </button>
                 </td>

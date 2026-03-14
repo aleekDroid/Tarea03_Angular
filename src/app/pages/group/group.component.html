@@ -5,7 +5,7 @@
   <div class="header">
     <h2>Gestión de Grupos</h2>
 
-    <button pButton label="Nuevo Grupo" icon="pi pi-plus" (click)="openNew()">
+    <button *ngIf="authService.hasPermission('create_group')" pButton label="Nuevo Grupo" icon="pi pi-plus" (click)="openNew()">
     </button>
   </div>
 
@@ -56,7 +56,7 @@
             <ng-template pTemplate="content">
               <div class="menu-items">
                 <button pButton label="Ver Tickets" icon="pi pi-ticket" (click)="openGroupTickets(group); op.hide()"></button>
-                <button pButton label="Gestionar Usuarios" icon="pi pi-users" (click)="manageGroup(group); op.hide()"></button>
+                <button *ngIf="authService.hasPermission('manage_users')" pButton label="Gestionar Usuarios" icon="pi pi-users" (click)="manageGroup(group); op.hide()"></button>
               </div>
             </ng-template>
           </p-overlayPanel>

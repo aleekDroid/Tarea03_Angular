@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 
 import { GroupUserService } from '../../services/group-user.service';
+import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -33,15 +34,22 @@ export class GroupUsersComponent implements OnInit{
   selectedUser:any
 
   constructor(
-    private route:ActivatedRoute,
-    private groupUserService:GroupUserService,
-    private userService:UserService
+    private route: ActivatedRoute,
+    private groupUserService: GroupUserService,
+    private userService: UserService,
+    public authService: AuthService,
+    private router: Router
   ){}
 
   ngOnInit(){
 
     this.groupId =
       Number(this.route.snapshot.paramMap.get('id'))
+
+    if (!this.authService.hasPermission('manage_users')) {
+      this.router.navigate(['/home']);
+      return;
+    }
 
     this.users = this.userService.getUsers()
 

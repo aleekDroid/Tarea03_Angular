@@ -85,8 +85,8 @@ display:flex;
 .ticket-details .field {
   display: flex !important;
   flex-direction: column !important;
-  gap: 0.35rem !important;
-  margin-bottom: 1rem !important;
+  gap: 0.5rem !important;
+  margin-bottom: 1.5rem !important;
   width: 100%;
 }
 

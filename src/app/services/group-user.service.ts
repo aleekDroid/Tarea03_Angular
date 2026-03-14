@@ -12,8 +12,11 @@ export class GroupUserService {
     if (!localStorage.getItem(this.STORAGE_KEY)) {
 
       const initialData = {
-        1: [1,2,3],
-        2: [2,4]
+        1: [1,2,3,5,7],
+        2: [2,4,6,8],
+        3: [1,9,10],
+        4: [3,11,12],
+        5: [1,13,14]
       };
 
       localStorage.setItem(

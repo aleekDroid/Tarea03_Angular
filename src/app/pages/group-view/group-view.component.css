@@ -1,13 +1,14 @@
 .kanban {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 30px;
     margin-top: 20px;
+    overflow-x: auto; /* Allow horizontal scroll if needed */
 }
 
 .kanban-column {
-    flex: none;
-    width: 100%;
+    flex: 1;
+    min-width: 250px;
     background: #f4f6f8;
     padding: 15px;
     border-radius: 6px;
@@ -40,8 +41,8 @@
 .ticket-details .field {
   display: flex !important;
   flex-direction: column !important;
-  gap: 0.35rem !important;
-  margin-bottom: 1rem !important;
+  gap: 0.5rem !important;
+  margin-bottom: 1.5rem !important;
   width: 100%;
 }
 
