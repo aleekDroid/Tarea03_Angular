@@ -61,3 +61,33 @@
   </p-card>
 
 </div>
+
+<div class="assigned-tickets-container" *ngIf="assignedTickets.length > 0">
+  <h2>Tickets asignados</h2>
+  <p-table [value]="assignedTickets" [paginator]="true" [rows]="5" [responsiveLayout]="'scroll'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Estado</th>
+        <th>Prioridad</th>
+        <th>Grupo</th>
+        <th>Fecha límite</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-ticket>
+      <tr>
+        <td>{{ ticket.id }}</td>
+        <td>{{ ticket.titulo }}</td>
+        <td>{{ ticket.estado }}</td>
+        <td>{{ ticket.prioridad }}</td>
+        <td>{{ ticket.grupoId }}</td>
+        <td>{{ ticket.fechaLimite | date:'dd-MM-yyyy' }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<div class="assigned-tickets-container" *ngIf="assignedTickets.length === 0">
+  <p>No hay tickets asignados actualmente.</p>
+</div>

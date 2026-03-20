@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextarea } from 'primeng/inputtextarea';
@@ -26,6 +27,7 @@ import { UserService } from '../../services/user.service';
     TableModule,
     ButtonModule,
     SelectButtonModule,
+    DropdownModule,
     FormsModule,
     CardModule,
     DragDropModule,
@@ -49,6 +51,7 @@ export class GroupViewComponent implements OnInit {
   revision: Ticket[] = [];
   finalizados: Ticket[] = [];
 
+  users: any[] = [];
   viewMode = 'list'
 
   options = [
@@ -113,6 +116,7 @@ export class GroupViewComponent implements OnInit {
   ngOnInit() {
 
     this.groupId = Number(this.route.snapshot.paramMap.get('id'))
+    this.users = this.userService.getUsers();
 
     this.loadTickets()
 

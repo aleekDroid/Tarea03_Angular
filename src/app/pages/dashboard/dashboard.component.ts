@@ -47,9 +47,11 @@ export class DashboardComponent implements OnInit {
   groups: any[] = [];
   selectedGroup: any;
   tickets: Ticket[] = [];
+  users: any[] = [];
 
   displayDialog = false;
   selectedTicket: Ticket | null = null;
+  isNewTicket = false;
 
   prioridades = [
     { label: 'Baja', value: 'baja' },
@@ -80,6 +82,8 @@ export class DashboardComponent implements OnInit {
     this.groupChart = this.dashboardService.ticketsByGroup();
 
     this.groups = this.groupService.getGroups();
+    this.users = this.userService.getUsers();
+
     if (this.groups.length > 0) {
       this.selectedGroup = this.groups[0];
       this.loadTickets();
@@ -98,20 +102,33 @@ export class DashboardComponent implements OnInit {
 
   openTicketDialog(ticket: Ticket) {
     this.selectedTicket = { ...ticket };
+    this.isNewTicket = false;
     this.displayDialog = true;
   }
 
   saveTicket() {
-    if (this.selectedTicket) {
-      this.ticketService.updateTicket(this.selectedTicket);
-      this.loadTickets();
-      this.displayDialog = false;
+    if (!this.selectedTicket) return;
+
+    if (!this.selectedTicket.asignadoA) {
+      this.selectedTicket.asignadoA = this.authService.getCurrentUser()?.name || '';
     }
+
+    if (this.isNewTicket || this.selectedTicket.id === 0) {
+      if (!this.selectedGroup) return;
+      this.selectedTicket.grupoId = this.selectedGroup.id;
+      this.ticketService.createTicket(this.selectedTicket);
+    } else {
+      this.ticketService.updateTicket(this.selectedTicket);
+    }
+
+    this.loadTickets();
+    this.displayDialog = false;
+    this.isNewTicket = false;
   }
 
   createTicket() {
     const newTicket: Ticket = {
-      id: 0, // Will be set in service
+      id: 0,
       titulo: '',
       descripcion: '',
       estado: 'pendiente',
@@ -124,6 +141,7 @@ export class DashboardComponent implements OnInit {
       historial: ['Ticket creado']
     };
     this.selectedTicket = newTicket;
+    this.isNewTicket = true;
     this.displayDialog = true;
   }
 

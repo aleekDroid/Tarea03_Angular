@@ -158,7 +158,16 @@
 
       <label for="asignadoA">Asignado a</label>
 
-      <input pInputText id="asignadoA" [(ngModel)]="selectedTicket.asignadoA" [disabled]="!authService.hasPermission('edit_ticket')" />
+      <p-dropdown
+        [options]="users"
+        [(ngModel)]="selectedTicket.asignadoA"
+        optionLabel="name"
+        optionValue="name"
+        [filter]="true"
+        filterBy="name"
+        placeholder="Seleccione un usuario"
+        [disabled]="!authService.hasPermission('edit_ticket')">
+      </p-dropdown>
 
     </div>
 

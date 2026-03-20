@@ -274,6 +274,10 @@ export class TicketService {
     return this.fakeTickets.filter(t => t.grupoId === groupId);
   }
 
+  getTicketsByAssignedUser(userName: string): Ticket[] {
+    return this.fakeTickets.filter(t => t.asignadoA === userName);
+  }
+
   updateTicket(ticket: Ticket): void {
     const index = this.fakeTickets.findIndex(t => t.id === ticket.id);
     if (index !== -1) {

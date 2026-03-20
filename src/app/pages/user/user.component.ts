@@ -7,11 +7,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 
 import { MessageService } from 'primeng/api';
 
 import { AuthService } from '../../services/auth.service';
+import { TicketService } from '../../services/ticket.service';
 
 @Component({
   selector: 'app-user',
@@ -24,6 +26,7 @@ import { AuthService } from '../../services/auth.service';
     PasswordModule,
     ButtonModule,
     InputNumberModule,
+    TableModule,
     ToastModule
   ],
   providers: [MessageService],
@@ -42,8 +45,11 @@ export class UserComponent implements OnInit {
     age: null
   };
 
+  assignedTickets: any[] = [];
+
   constructor(
     private authService: AuthService,
+    private ticketService: TicketService,
     private messageService: MessageService
   ) {}
 
@@ -53,6 +59,7 @@ export class UserComponent implements OnInit {
 
     if (currentUser) {
       this.user = { ...currentUser };
+      this.assignedTickets = this.ticketService.getTicketsByAssignedUser(currentUser.name);
     }
 
   }
