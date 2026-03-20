@@ -74,7 +74,14 @@ export class HeaderComponent implements OnInit {
             label: 'Dashboard',
             icon: 'pi pi-chart-bar',
             routerLink: ['/home/dashboard']
-          }
+          },
+          ...(this.currentUser?.id === 1 ? [
+            {
+              label: 'Gestión de Permisos',
+              icon: 'pi pi-lock',
+              routerLink: ['/home/manage-permissions']
+            }
+          ] : [])
         ]
       }
     ];

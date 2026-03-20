@@ -20,6 +20,15 @@ export interface User {
 })
 export class UserService {
 
+  private availablePermissions: string[] = [
+    'view',
+    'move_kanban',
+    'create_group',
+    'manage_users',
+    'edit_ticket',
+    'edit_profile'
+  ];
+
   private users: User[] = [
     {
       id: 1,
@@ -215,5 +224,40 @@ export class UserService {
     };
     this.users.push(newUser);
     return of({ success: true, message: 'Registro exitoso' }).pipe(delay(500));
+  }
+
+  getAvailablePermissions(): string[] {
+    return [...this.availablePermissions];
+  }
+
+  updateUserPermissions(userId: number, permissions: string[]): void {
+    const user = this.users.find(u => u.id === userId);
+    if (user) {
+      user.permissions = permissions;
+      // If the current user is updated, refresh their permissions
+      if (this.currentUser && this.currentUser.id === userId) {
+        this.currentUser.permissions = permissions;
+      }
+    }
+  }
+
+  addPermissionToUser(userId: number, permission: string): void {
+    const user = this.users.find(u => u.id === userId);
+    if (user && !user.permissions.includes(permission)) {
+      user.permissions.push(permission);
+      if (this.currentUser && this.currentUser.id === userId) {
+        this.currentUser.permissions.push(permission);
+      }
+    }
+  }
+
+  removePermissionFromUser(userId: number, permission: string): void {
+    const user = this.users.find(u => u.id === userId);
+    if (user) {
+      user.permissions = user.permissions.filter(p => p !== permission);
+      if (this.currentUser && this.currentUser.id === userId) {
+        this.currentUser.permissions = this.currentUser.permissions.filter(p => p !== permission);
+      }
+    }
   }
 }

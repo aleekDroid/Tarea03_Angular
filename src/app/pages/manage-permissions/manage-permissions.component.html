@@ -1,0 +1,65 @@
+<p-toast></p-toast>
+
+<div class="permissions-container">
+
+  <p-card header="Gestión de Permisos">
+
+    <p class="info-text">
+      Aquí puedes asignar o revocar permisos a los usuarios del sistema.
+    </p>
+
+    <br>
+
+    <p-table [value]="users" [paginator]="true" [rows]="10" [responsiveLayout]="'scroll'">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Usuario</th>
+          <th *ngFor="let permission of availablePermissions" [ngStyle]="{'text-align': 'center'}">
+            {{ permission }}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>
+            <strong>{{ user.name }}</strong>
+            <br>
+            <small style="color: #999;">{{ user.email }}</small>
+          </td>
+          <td *ngFor="let permission of availablePermissions" [ngStyle]="{'text-align': 'center'}">
+            <input
+              type="checkbox"
+              [checked]="hasPermission(user.id, permission)"
+              (change)="togglePermission(user.id, permission)"
+              [attr.aria-label]="'permission-' + user.id + '-' + permission">
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+
+    <br>
+
+    <div class="actions">
+      <button
+        pButton
+        label="Guardar Cambios"
+        icon="pi pi-save"
+        (click)="savePermissions()"
+        class="p-button-success">
+      </button>
+
+      <button
+        pButton
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="resetChanges()"
+        class="p-button-secondary">
+      </button>
+    </div>
+
+  </p-card>
+
+</div>

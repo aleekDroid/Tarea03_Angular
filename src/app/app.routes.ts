@@ -7,6 +7,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { GroupComponent } from './pages/group/group.component';
 import { UserComponent } from './pages/user/user.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ManagePermissionsComponent } from './pages/manage-permissions/manage-permissions.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -37,6 +38,11 @@ export const routes: Routes = [
         path: 'group-users/:id',
         loadComponent: () => import('./pages/group-users/group-users.component')
           .then(m => m.GroupUsersComponent)
+      },
+
+      {
+        path: 'manage-permissions',
+        component: ManagePermissionsComponent
       }
 
     ]
