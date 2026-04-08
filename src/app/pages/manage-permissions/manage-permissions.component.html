@@ -16,7 +16,7 @@
         <tr>
           <th>Usuario</th>
           <th *ngFor="let permission of availablePermissions" [ngStyle]="{'text-align': 'center'}">
-            {{ permission }}
+            {{ getPermissionLabel(permission) }}
           </th>
         </tr>
       </ng-template>

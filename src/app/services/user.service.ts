@@ -29,7 +29,7 @@ export class UserService {
     'edit_profile'
   ];
 
-  private users: User[] = [
+  private defaultUsers: User[] = [
     {
       id: 1,
       email: 'admin@gmail.com',
@@ -170,7 +170,49 @@ export class UserService {
     }
   ];
 
+  private users: User[] = [];
   private currentUser: User | null = null;
+
+  constructor() {
+    this.loadUsers();
+    this.loadCurrentUser();
+  }
+
+  private loadUsers(): void {
+    const storedUsers = localStorage.getItem('users_data');
+    if (storedUsers) {
+      try {
+        this.users = JSON.parse(storedUsers);
+      } catch {
+        this.users = JSON.parse(JSON.stringify(this.defaultUsers));
+        this.saveUsers();
+      }
+    } else {
+      this.users = JSON.parse(JSON.stringify(this.defaultUsers));
+      this.saveUsers();
+    }
+  }
+
+  private saveUsers(): void {
+    localStorage.setItem('users_data', JSON.stringify(this.users));
+  }
+
+  private loadCurrentUser(): void {
+    const storedCurrentUser = localStorage.getItem('currentUser');
+    if (storedCurrentUser) {
+      try {
+        this.currentUser = JSON.parse(storedCurrentUser);
+      } catch {
+        this.currentUser = null;
+      }
+    }
+  }
+
+  private saveCurrentUser(): void {
+    if (this.currentUser) {
+      localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+    }
+  }
 
   getUsers(): User[] {
     return this.users;
@@ -187,7 +229,8 @@ export class UserService {
   login(email: string, password: string): Observable<{ success: boolean; message: string; user?: User }> {
     const user = this.users.find(u => u.email === email && u.password === password);
     if (user) {
-      this.currentUser = user;
+      this.currentUser = { ...user };
+      this.saveCurrentUser();
       return of({ success: true, message: 'Login exitoso', user }).pipe(delay(500));
     } else {
       return of({ success: false, message: 'Email o contraseña incorrectos' }).pipe(delay(500));
@@ -196,6 +239,7 @@ export class UserService {
 
   logout(): void {
     this.currentUser = null;
+    localStorage.removeItem('currentUser');
   }
 
   getCurrentUser(): User | null {
@@ -234,9 +278,11 @@ export class UserService {
     const user = this.users.find(u => u.id === userId);
     if (user) {
       user.permissions = permissions;
-      // If the current user is updated, refresh their permissions
+      this.saveUsers();
+      // Si el usuario actualizado es el currentUser, actualizar también
       if (this.currentUser && this.currentUser.id === userId) {
         this.currentUser.permissions = permissions;
+        this.saveCurrentUser();
       }
     }
   }
@@ -245,8 +291,10 @@ export class UserService {
     const user = this.users.find(u => u.id === userId);
     if (user && !user.permissions.includes(permission)) {
       user.permissions.push(permission);
+      this.saveUsers();
       if (this.currentUser && this.currentUser.id === userId) {
         this.currentUser.permissions.push(permission);
+        this.saveCurrentUser();
       }
     }
   }
@@ -255,8 +303,10 @@ export class UserService {
     const user = this.users.find(u => u.id === userId);
     if (user) {
       user.permissions = user.permissions.filter(p => p !== permission);
+      this.saveUsers();
       if (this.currentUser && this.currentUser.id === userId) {
         this.currentUser.permissions = this.currentUser.permissions.filter(p => p !== permission);
+        this.saveCurrentUser();
       }
     }
   }

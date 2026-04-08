@@ -1,23 +1,13 @@
 export interface Ticket {
-
-  id: number
-
-  titulo: string
-  descripcion: string
-
-  estado: 'pendiente' | 'en progreso' | 'revision' | 'finalizado'
-
-  prioridad: 'baja' | 'media' | 'alta'
-
-  asignadoA: string
-
-  grupoId: number
-
-  fechaCreacion: Date
-  fechaLimite: Date
-
-  comentarios: string[]
-
-  historial: string[]
-
+  id: string;
+  titulo: string;
+  descripcion: string;
+  estado: string;
+  prioridad: string;
+  asignadoA?: string;
+  asignadoId?: string;
+  grupoId: string;
+  grupoNombre?: string;
+  fechaCreacion: string | Date;
+  fechaLimite?: string | Date; 
 }

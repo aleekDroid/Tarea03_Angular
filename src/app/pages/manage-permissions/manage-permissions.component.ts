@@ -34,6 +34,16 @@ export class ManagePermissionsComponent implements OnInit {
   users: User[] = [];
   availablePermissions: string[] = [];
 
+  // Map permiso técnico a etiqueta legible
+  permissionLabels: Map<string, string> = new Map([
+    ['view', 'Ver'],
+    ['move_kanban', 'Mover Kanban'],
+    ['create_group', 'Crear Grupo'],
+    ['manage_users', 'Gestionar Usuarios'],
+    ['edit_ticket', 'Editar Ticket'],
+    ['edit_profile', 'Editar Perfil']
+  ]);
+
   // Track user permissions changes
   userPermissionsMap: Map<number, string[]> = new Map();
 
@@ -110,5 +120,9 @@ export class ManagePermissionsComponent implements OnInit {
 
   getUserName(user: User): string {
     return user.name;
+  }
+
+  getPermissionLabel(permission: string): string {
+    return this.permissionLabels.get(permission) || permission;
   }
 }

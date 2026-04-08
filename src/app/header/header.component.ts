@@ -56,33 +56,41 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
+    this.buildNavItems();
+  }
+
+  buildNavItems() {
+    const baseItems = [
+      {
+        label: 'Group',
+        icon: 'pi pi-users',
+        routerLink: ['/home/group']
+      },
+      {
+        label: 'User',
+        icon: 'pi pi-user',
+        routerLink: ['/home/user']
+      },
+      {
+        label: 'Dashboard',
+        icon: 'pi pi-chart-bar',
+        routerLink: ['/home/dashboard']
+      }
+    ];
+
+    // Solo agregar si es admin (id=1)
+    if (this.currentUser?.id === 1) {
+      baseItems.push({
+        label: 'Gestión de Permisos',
+        icon: 'pi pi-lock',
+        routerLink: ['/home/manage-permissions']
+      });
+    }
+
     this.navItems = [
       {
         label: 'Navigation',
-        items: [
-          {
-            label: 'Group',
-            icon: 'pi pi-users',
-            routerLink: ['/home/group']
-          },
-          {
-            label: 'User',
-            icon: 'pi pi-user',
-            routerLink: ['/home/user']
-          },
-          {
-            label: 'Dashboard',
-            icon: 'pi pi-chart-bar',
-            routerLink: ['/home/dashboard']
-          },
-          ...(this.currentUser?.id === 1 ? [
-            {
-              label: 'Gestión de Permisos',
-              icon: 'pi pi-lock',
-              routerLink: ['/home/manage-permissions']
-            }
-          ] : [])
-        ]
+        items: baseItems
       }
     ];
   }

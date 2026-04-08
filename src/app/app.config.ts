@@ -2,7 +2,9 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
-import Lara from '@primeuix/themes/lara';
+import Lara from '@primeuix/themes/lara'; 
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 import { routes } from './app.routes';
 
@@ -11,6 +13,9 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideAnimations(),   
     provideRouter(routes),
+    provideHttpClient(
+      withInterceptors([authInterceptor]) 
+    ),
     providePrimeNG({
       theme: {
         preset: Lara,
