@@ -1,7 +1,7 @@
+// src/app/pages/group/group.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -10,9 +10,7 @@ import { ToastModule } from 'primeng/toast';
 import { TagModule } from 'primeng/tag';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { Router } from '@angular/router';
-
 import { MessageService } from 'primeng/api';
-
 import { AuthService } from '../../services/auth.service';
 import { Group } from '../../models/group.model';
 import { GroupService } from '../../services/group.service';
@@ -55,18 +53,20 @@ export class GroupComponent implements OnInit {
 
   emptyGroup(): Group {
     return {
-      id: 0,
+      id: '',
       nombre: '',
       categoria: '',
       nivel: '',
-      autor: '',
+      creador_nombre: '',
       miembros: 0,
       tickets: 0
     };
   }
 
   loadGroups() {
-    this.groups = this.groupService.getGroups();
+    this.groupService.getGroups().subscribe(data => {
+      this.groups = data;
+    });
   }
 
   openNew() {
@@ -81,67 +81,43 @@ export class GroupComponent implements OnInit {
   }
 
   saveGroup() {
-
     if (!this.selectedGroup.nombre) return;
 
-    if (this.selectedGroup.id === 0) {
+    if (this.selectedGroup.id === '') {
       if (!this.authService.hasPermission('create_group')) return;
-      this.selectedGroup.id = Date.now();
-      this.groupService.addGroup(this.selectedGroup);
-
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Grupo creado',
-        detail: 'El grupo fue creado correctamente'
+      
+      this.groupService.addGroup(this.selectedGroup).subscribe({
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Grupo creado', detail: 'El grupo fue creado correctamente' });
+          this.groupDialog = false;
+          this.loadGroups(); 
+        },
+        error: (err: any) => console.error('Error creando grupo', err)
       });
 
     } else {
-
-      this.groupService.updateGroup(this.selectedGroup);
-
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Grupo actualizado',
-        detail: 'El grupo fue actualizado'
+      
+      this.groupService.updateGroup(this.selectedGroup).subscribe({
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Grupo actualizado', detail: 'El grupo fue actualizado' });
+          this.groupDialog = false;
+          this.loadGroups();
+        },
+        error: (err: any) => console.error('Error actualizando grupo', err)
       });
     }
-
-    this.groupDialog = false;
-    this.loadGroups();
   }
 
   deleteGroup(group: Group) {
     if (!this.authService.hasPermission('create_group')) return;
 
-    this.groupService.deleteGroup(group.id);
-
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Grupo eliminado',
-      detail: 'El grupo fue eliminado'
-    });
-
-    this.loadGroups();
-  }
-
-  getGroupMenu(group: any) {
-
-    return [
-
-      {
-        label: 'Ver Tickets',
-        icon: 'pi pi-ticket',
-        command: () => this.openGroupTickets(group)
+    this.groupService.deleteGroup(group.id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'warn', summary: 'Grupo eliminado', detail: 'El grupo fue eliminado' });
+        this.loadGroups();
       },
-
-      {
-        label: 'Gestionar Usuarios',
-        icon: 'pi pi-users',
-        command: () => this.manageGroup(group)
-      }
-
-    ]
-
+      error: (err: any) => console.error('Error eliminando grupo', err)
+    });
   }
 
   openGroupTickets(group: any) {

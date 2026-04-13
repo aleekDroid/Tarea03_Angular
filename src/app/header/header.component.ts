@@ -1,9 +1,8 @@
+// src/app/header/header.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
 import { MenuItem } from 'primeng/api';
-
 import { MenubarModule } from 'primeng/menubar';
 import { AvatarModule } from 'primeng/avatar';
 import { InputTextModule } from 'primeng/inputtext';
@@ -78,8 +77,7 @@ export class HeaderComponent implements OnInit {
       }
     ];
 
-    // Solo agregar si es admin (id=1)
-    if (this.currentUser?.id === 1) {
+    if (this.authService.hasPermission('manage_users')) {
       baseItems.push({
         label: 'Gestión de Permisos',
         icon: 'pi pi-lock',

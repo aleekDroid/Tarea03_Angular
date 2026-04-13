@@ -1,9 +1,12 @@
 export interface Group {
-  id: number;
+  id: string; // ¡Cambio clave! Ya no es number
   nombre: string;
-  categoria: string;
-  nivel: string;
-  autor: string;
-  miembros: number;
-  tickets: number;
+  descripcion?: string;
+  creador_id?: string;
+  creador_nombre?: string;
+  creado_en?: string | Date;
+  categoria?: string;
+  nivel?: string;
+  miembros?: number;
+  tickets?: number;
 }

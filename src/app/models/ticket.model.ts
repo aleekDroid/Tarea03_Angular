@@ -10,4 +10,6 @@ export interface Ticket {
   grupoNombre?: string;
   fechaCreacion: string | Date;
   fechaLimite?: string | Date; 
+  comentarios?: any[];
+  historial?: any[];
 }

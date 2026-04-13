@@ -7,42 +7,18 @@
     <div class="grid">
 
       <div class="field">
-        <label>Nombres</label>
-        <input pInputText [(ngModel)]="user.name">
+        <label>Usuario</label>
+        <input pInputText [(ngModel)]="user.username">
       </div>
 
       <div class="field">
-        <label>Apellidos</label>
-        <input pInputText [(ngModel)]="user.lastName">
+        <label>ID</label>
+        <input pInputText [(ngModel)]="user.id" disabled>
       </div>
 
       <div class="field full">
-        <label>Email</label>
-        <input pInputText [(ngModel)]="user.email" disabled>
-      </div>
-
-      <div class="field">
-        <label>Teléfono</label>
-        <input pInputText [(ngModel)]="user.phone">
-      </div>
-
-      <div class="field">
-        <label>Edad</label>
-        <p-inputNumber [(ngModel)]="user.age"></p-inputNumber>
-      </div>
-
-      <div class="field full">
-        <label>Dirección</label>
-        <input pInputText [(ngModel)]="user.address">
-      </div>
-
-      <div class="field full">
-        <label>Cambiar contraseña</label>
-        <p-password
-          [(ngModel)]="user.password"
-          toggleMask="true"
-          [feedback]="false">
-        </p-password>
+        <label>Permisos</label>
+        <input pInputText [ngModel]="user.permisos.join(', ')" disabled>
       </div>
 
     </div>
@@ -81,7 +57,7 @@
         <td>{{ ticket.titulo }}</td>
         <td>{{ ticket.estado }}</td>
         <td>{{ ticket.prioridad }}</td>
-        <td>{{ ticket.grupoId }}</td>
+        <td>{{ ticket.grupoNombre || ticket.grupoId }}</td>
         <td>{{ ticket.fechaLimite | date:'dd-MM-yyyy' }}</td>
       </tr>
     </ng-template>

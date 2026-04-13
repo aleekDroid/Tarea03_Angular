@@ -38,11 +38,11 @@ import { UserService } from '../../services/user.service';
 })
 export class DashboardComponent implements OnInit {
 
-  stats: any;
-  statusChart: any;
-  priorityChart: any;
-  weeklyChart: any;
-  groupChart: any;
+  stats = { users: 0, groups: 0, tickets: 0, active: 0 };
+  statusChart: any = null;
+  priorityChart: any = null;
+  weeklyChart: any = null;
+  groupChart: any = null;
 
   groups: any[] = [];
   selectedGroup: any;
@@ -75,24 +75,47 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.stats = this.dashboardService.getStats();
-    this.statusChart = this.dashboardService.ticketsByStatus();
-    this.priorityChart = this.dashboardService.ticketsByPriority();
-    this.weeklyChart = this.dashboardService.weeklyActivity();
-    this.groupChart = this.dashboardService.ticketsByGroup();
+    this.dashboardService.getStats().subscribe(data => {
+      this.stats = data;
+    });
 
-    this.groups = this.groupService.getGroups();
-    this.users = this.userService.getUsers();
+    this.dashboardService.ticketsByStatus().subscribe(data => {
+      this.statusChart = data;
+    });
 
-    if (this.groups.length > 0) {
-      this.selectedGroup = this.groups[0];
-      this.loadTickets();
-    }
+    this.dashboardService.ticketsByPriority().subscribe(data => {
+      this.priorityChart = data;
+    });
+
+    this.dashboardService.weeklyActivity().subscribe(data => {
+      this.weeklyChart = data;
+    });
+
+    this.dashboardService.ticketsByGroup().subscribe(data => {
+      this.groupChart = data;
+    });
+
+    this.groupService.getGroups().subscribe(data => {
+      this.groups = data;
+      if (this.groups.length > 0) {
+        this.selectedGroup = this.groups[0];
+        this.loadTickets();
+      }
+    });
+
+    this.userService.getUsers().subscribe({
+      next: (data) => {
+        this.users = data;
+      },
+      error: (err) => console.error('Error cargando usuarios', err)
+    });
   }
 
   loadTickets() {
     if (this.selectedGroup) {
-      this.tickets = this.ticketService.getTicketsByGroup(this.selectedGroup.id);
+      this.ticketService.getTicketsByGroup(this.selectedGroup.id).subscribe(data => {
+        this.tickets = data;
+      });
     }
   }
 
@@ -110,31 +133,41 @@ export class DashboardComponent implements OnInit {
     if (!this.selectedTicket) return;
 
     if (!this.selectedTicket.asignadoA) {
-      this.selectedTicket.asignadoA = this.authService.getCurrentUser()?.name || '';
+      this.selectedTicket.asignadoA = this.authService.getCurrentUser()?.username || '';
     }
 
-    if (this.isNewTicket || this.selectedTicket.id === 0) {
+    if (this.isNewTicket || this.selectedTicket.id === '') {
       if (!this.selectedGroup) return;
       this.selectedTicket.grupoId = this.selectedGroup.id;
-      this.ticketService.createTicket(this.selectedTicket);
+      this.ticketService.createTicket(this.selectedTicket).subscribe({
+        next: () => {
+          this.loadTickets();
+          this.displayDialog = false;
+          this.isNewTicket = false;
+        },
+        error: (err: any) => console.error('Error creando ticket', err)
+      });
     } else {
-      this.ticketService.updateTicket(this.selectedTicket);
+      this.ticketService.updateTicket(this.selectedTicket).subscribe({
+        next: () => {
+          this.loadTickets();
+          this.displayDialog = false;
+          this.isNewTicket = false;
+        },
+        error: (err: any) => console.error('Error actualizando ticket', err)
+      });
     }
-
-    this.loadTickets();
-    this.displayDialog = false;
-    this.isNewTicket = false;
   }
 
   createTicket() {
     const newTicket: Ticket = {
-      id: 0,
+      id: '',
       titulo: '',
       descripcion: '',
       estado: 'pendiente',
       prioridad: 'media',
-      asignadoA: this.authService.getCurrentUser()?.name || '',
-      grupoId: this.selectedGroup?.id || 1,
+      asignadoA: this.authService.getCurrentUser()?.username || '',
+      grupoId: this.selectedGroup?.id || '',
       fechaCreacion: new Date(),
       fechaLimite: new Date(),
       comentarios: [],
@@ -148,7 +181,7 @@ export class DashboardComponent implements OnInit {
   canEditTicket(ticket: Ticket): boolean {
     const currentUser = this.authService.getCurrentUser();
     const hasEditPermission = this.authService.hasPermission('edit_ticket');
-    const isAssigned = currentUser && ticket.asignadoA === currentUser.name;
+    const isAssigned = currentUser && ticket.asignadoA === currentUser.username;
     return !!hasEditPermission || !!isAssigned;
   }
 

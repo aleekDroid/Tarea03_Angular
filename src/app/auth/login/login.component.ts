@@ -1,3 +1,4 @@
+// src/app/auth/login/login.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -42,66 +43,32 @@ export class LoginComponent {
     private messageService: MessageService
   ) {}
 
-  login(): void {
-
+login(): void {
     if (!this.email || !this.password) {
-
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Por favor completa todos los campos'
-      });
-
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Por favor completa todos los campos' });
       return;
     }
 
     this.loading = true;
 
     this.authService.login(this.email, this.password).subscribe({
-
       next: (response) => {
-
         this.loading = false;
-
-        if (response.success) {
-
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Éxito',
-            detail: response.message,
-            life: 2000
-          });
-
+        
+        // ¡La clave! NestJS devuelve el token. Si lo tenemos, entramos.
+        if (response.token) {
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Bienvenido al sistema', life: 2000 });
+          
           setTimeout(() => {
             this.router.navigate(['/home']);
           }, 1500);
-
-        } else {
-
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: response.message
-          });
-
         }
-
       },
-
-      error: () => {
-
+      error: (err: any) => {
         this.loading = false;
-
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Ocurrió un error en el login'
-        });
-
+        const mensajeReal = err.error?.message || 'Error de conexión con el servidor';
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: mensajeReal });
       }
-
     });
-
   }
-
 }

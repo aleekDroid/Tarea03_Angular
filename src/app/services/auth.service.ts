@@ -1,35 +1,53 @@
+// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { UserService, User } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private apiUrl = 'http://localhost:3001/auth';
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private http: HttpClient,
+    private userService: UserService
+  ) {}
 
-  register(userData: any): Observable<{ success: boolean; message: string }> {
-    return this.userService.register(userData);
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, { username, password }).pipe(
+      tap((response: any) => {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('currentUser', JSON.stringify(response.user));
+      })
+    );
   }
 
-  login(email: string, password: string): Observable<{ success: boolean; message: string }> {
-    return this.userService.login(email, password);
+  register(userData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, userData);
   }
 
   logout(): void {
-    this.userService.logout();
+    localStorage.removeItem('token');
+    localStorage.removeItem('currentUser');
   }
 
-  getCurrentUser(): User | null {
-    return this.userService.getCurrentUser();
+getCurrentUser(): any | null {
+    // Leemos el usuario real guardado en la sesión
+    const userStr = localStorage.getItem('currentUser');
+    return userStr ? JSON.parse(userStr) : null;
   }
 
   isAuthenticated(): boolean {
-    return this.userService.isAuthenticated();
+    return !!localStorage.getItem('token');
   }
 
-  hasPermission(permission: string): boolean {
-    return this.userService.hasPermission(permission);
+hasPermission(permission: string): boolean {
+    const user = this.getCurrentUser();
+    if (user && user.permisos && Array.isArray(user.permisos)) {
+      return user.permisos.includes(permission);
+    }
+    return false;
   }
 }

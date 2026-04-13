@@ -47,6 +47,11 @@ export class SidebarComponent implements OnInit {
         label: 'User',
         icon: 'pi pi-user',
         routerLink: ['/home/user']
+      },
+      {
+        label: 'Dashboard',
+        icon: 'pi pi-chart-bar',
+        routerLink: ['/home/dashboard']
       }
     ];
 
@@ -64,6 +69,12 @@ export class SidebarComponent implements OnInit {
         label: 'Gestionar Usuarios',
         icon: 'pi pi-users',
         routerLink: ['/home/group-users']
+      });
+
+      baseItems.push({
+        label: 'Gestión de Permisos',
+        icon: 'pi pi-lock',
+        routerLink: ['/home/manage-permissions']
       });
     }
 

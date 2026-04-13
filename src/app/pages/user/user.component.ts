@@ -36,13 +36,9 @@ import { TicketService } from '../../services/ticket.service';
 export class UserComponent implements OnInit {
 
   user: any = {
-    name: '',
-    lastName: '',
-    email: '',
-    password: '',
-    phone: '',
-    address: '',
-    age: null
+    id: '',
+    username: '',
+    permisos: [] as string[]
   };
 
   assignedTickets: any[] = [];
@@ -58,8 +54,14 @@ export class UserComponent implements OnInit {
     const currentUser = this.authService.getCurrentUser();
 
     if (currentUser) {
-      this.user = { ...currentUser };
-      this.assignedTickets = this.ticketService.getTicketsByAssignedUser(currentUser.name);
+      this.user = {
+        id: currentUser.id ?? '',
+        username: currentUser.username ?? '',
+        permisos: currentUser.permisos ?? []
+      };
+      this.ticketService.getTicketsByAssignedUser(currentUser.id).subscribe(data => {
+        this.assignedTickets = data;
+      });
     }
 
   }
@@ -67,22 +69,12 @@ export class UserComponent implements OnInit {
   saveProfile() {
 
     try {
-
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-
-      const index = users.findIndex((u: any) => u.email === this.user.email);
-
-      if (index !== -1) {
-        users[index] = this.user;
-      }
-
-      localStorage.setItem('users', JSON.stringify(users));
       localStorage.setItem('currentUser', JSON.stringify(this.user));
 
       this.messageService.add({
         severity: 'success',
         summary: 'Perfil actualizado',
-        detail: 'Los cambios se guardaron correctamente'
+        detail: 'Los cambios locales se guardaron correctamente'
       });
 
     } catch (error) {

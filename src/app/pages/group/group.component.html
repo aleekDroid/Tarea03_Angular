@@ -1,3 +1,4 @@
+<!-- src/app/pages/group/group.component.html -->
 <p-toast></p-toast>
 
 <div class="card">
@@ -14,7 +15,6 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th>ID</th>
         <th>Nombre</th>
         <th>Categoría</th>
         <th>Nivel</th>
@@ -29,8 +29,6 @@
 
       <tr>
 
-        <td>{{group.id}}</td>
-
         <td>{{group.nombre}}</td>
 
         <td>
@@ -41,7 +39,7 @@
           <p-tag [value]="group.nivel" severity="success"></p-tag>
         </td>
 
-        <td>{{group.autor}}</td>
+        <td>{{group.creador_nombre}}</td>
 
         <td>{{group.miembros}}</td>
 
@@ -56,7 +54,8 @@
             <ng-template pTemplate="content">
               <div class="menu-items">
                 <button pButton label="Ver Tickets" icon="pi pi-ticket" (click)="openGroupTickets(group); op.hide()"></button>
-                <button *ngIf="authService.hasPermission('manage_users')" pButton label="Gestionar Usuarios" icon="pi pi-users" (click)="manageGroup(group); op.hide()"></button>
+                <button *ngIf="authService.hasPermission('create_group')" pButton label="Editar" icon="pi pi-pencil" (click)="editGroup(group); op.hide()"></button>
+                <button *ngIf="authService.hasPermission('manage_users')" pButton label="Ver Usuarios" icon="pi pi-users" (click)="manageGroup(group); op.hide()"></button>
               </div>
             </ng-template>
           </p-overlayPanel>
@@ -81,7 +80,7 @@
 
     <input pInputText [(ngModel)]="selectedGroup.nivel" placeholder="Nivel">
 
-    <input pInputText [(ngModel)]="selectedGroup.autor" placeholder="Autor">
+    <input pInputText [(ngModel)]="selectedGroup.creador_nombre" placeholder="Autor">
 
     <input pInputText type="number" [(ngModel)]="selectedGroup.miembros" placeholder="Miembros">
 

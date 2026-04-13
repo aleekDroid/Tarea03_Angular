@@ -2,16 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin, Observable } from 'rxjs';
 
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
-
-import { UserService, User } from '../../services/user.service';
-import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
+
+import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-manage-permissions',
@@ -31,10 +32,9 @@ import { MessageService } from 'primeng/api';
 })
 export class ManagePermissionsComponent implements OnInit {
 
-  users: User[] = [];
+  users: any[] = [];
   availablePermissions: string[] = [];
 
-  // Map permiso técnico a etiqueta legible
   permissionLabels: Map<string, string> = new Map([
     ['view', 'Ver'],
     ['move_kanban', 'Mover Kanban'],
@@ -44,8 +44,8 @@ export class ManagePermissionsComponent implements OnInit {
     ['edit_profile', 'Editar Perfil']
   ]);
 
-  // Track user permissions changes
-  userPermissionsMap: Map<number, string[]> = new Map();
+  // Ahora el mapa guarda llaves de tipo string (UUIDs)
+  userPermissionsMap: Map<string, string[]> = new Map();
 
   constructor(
     private userService: UserService,
@@ -55,21 +55,28 @@ export class ManagePermissionsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Only admin (id=1) can manage permissions
-    const currentUser = this.authService.getCurrentUser();
-    if (!currentUser || currentUser.id !== 1) {
+    // Seguridad Real: Revisamos el permiso, no un ID quemado
+    if (!this.authService.hasPermission('manage_users')) {
       this.router.navigate(['/home']);
       return;
     }
 
-    this.loadUsers();
     this.loadAvailablePermissions();
+    this.loadUsers();
   }
 
   loadUsers() {
-    this.users = this.userService.getUsers();
-    this.users.forEach(user => {
-      this.userPermissionsMap.set(user.id, [...user.permissions]);
+    this.userService.getUsers().subscribe({
+      next: (data) => {
+        this.users = data;
+        this.userPermissionsMap.clear();
+        this.users.forEach(user => {
+          // Extraemos los permisos reales que vienen del backend
+          const permisos = user.permisos_globales || [];
+          this.userPermissionsMap.set(user.id, [...permisos]);
+        });
+      },
+      error: (err) => console.error('Error al cargar usuarios', err)
     });
   }
 
@@ -77,12 +84,12 @@ export class ManagePermissionsComponent implements OnInit {
     this.availablePermissions = this.userService.getAvailablePermissions();
   }
 
-  hasPermission(userId: number, permission: string): boolean {
+  hasPermission(userId: string, permission: string): boolean {
     const permissions = this.userPermissionsMap.get(userId) || [];
     return permissions.includes(permission);
   }
 
-  togglePermission(userId: number, permission: string) {
+  togglePermission(userId: string, permission: string) {
     const permissions = this.userPermissionsMap.get(userId) || [];
     const index = permissions.indexOf(permission);
 
@@ -96,17 +103,34 @@ export class ManagePermissionsComponent implements OnInit {
   }
 
   savePermissions() {
+    const peticiones: Observable<any>[] = [];
+
+    // Empaquetamos todos los cambios en un arreglo de peticiones HTTP
     this.userPermissionsMap.forEach((permissions, userId) => {
-      this.userService.updateUserPermissions(userId, permissions);
+      peticiones.push(this.userService.updateUserPermissions(userId, permissions));
     });
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Éxito',
-      detail: 'Los permisos se actualizaron correctamente'
-    });
-
-    this.loadUsers();
+    if (peticiones.length > 0) {
+      // forkJoin dispara todas las peticiones al mismo tiempo y espera a que terminen
+      forkJoin(peticiones).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Los permisos se actualizaron en la base de datos'
+          });
+          this.loadUsers(); // Recargamos para ver los datos frescos
+        },
+        error: (err) => {
+          console.error(err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudieron guardar los permisos'
+          });
+        }
+      });
+    }
   }
 
   resetChanges() {
@@ -118,8 +142,8 @@ export class ManagePermissionsComponent implements OnInit {
     });
   }
 
-  getUserName(user: User): string {
-    return user.name;
+  getUserName(user: any): string {
+    return user.nombre_completo || user.username;
   }
 
   getPermissionLabel(permission: string): string {

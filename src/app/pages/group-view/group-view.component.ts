@@ -40,10 +40,9 @@ import { UserService } from '../../services/user.service';
 })
 export class GroupViewComponent implements OnInit {
 
-  groupId!: number
+  groupId!: string; // ¡Ahora es string para soportar UUID!
 
   tickets: Ticket[] = [];
-
   filteredTickets: Ticket[] = [];
 
   pendientes: Ticket[] = [];
@@ -52,12 +51,12 @@ export class GroupViewComponent implements OnInit {
   finalizados: Ticket[] = [];
 
   users: any[] = [];
-  viewMode = 'list'
+  viewMode = 'list';
 
   options = [
     { label: 'Lista', value: 'list' },
     { label: 'Kanban', value: 'kanban' }
-  ]
+  ];
 
   filters = [
     { label: 'Todos', value: 'all' },
@@ -91,52 +90,48 @@ export class GroupViewComponent implements OnInit {
     private userService: UserService
   ) { }
 
+  ngOnInit() {
+    // Tomamos el ID como texto (UUID)
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.groupId = id;
+      // this.users = this.userService.getUsers(); 
+      this.loadTickets();
+    }
+  }
+
   loadTickets() {
-
-    this.tickets = this.ticketService.getTicketsByGroup(this.groupId)
-
-    this.applyFilter();
-
-    this.separarTickets()
-
+    // ¡Llamada real al microservicio de Tickets!
+    this.ticketService.getTickets(this.groupId).subscribe({
+      next: (data) => {
+        this.tickets = data;
+        this.applyFilter();
+        this.separarTickets();
+      },
+      error: (err) => console.error('Error al cargar tickets', err)
+    });
   }
 
   separarTickets() {
-
-    this.pendientes = this.filteredTickets.filter(t => t.estado === 'pendiente')
-
-    this.enProgreso = this.filteredTickets.filter(t => t.estado === 'en progreso')
-
-    this.revision = this.filteredTickets.filter(t => t.estado === 'revision')
-
-    this.finalizados = this.filteredTickets.filter(t => t.estado === 'finalizado')
-
-  }
-
-  ngOnInit() {
-
-    this.groupId = Number(this.route.snapshot.paramMap.get('id'))
-    this.users = this.userService.getUsers();
-
-    this.loadTickets()
-
+    this.pendientes = this.filteredTickets.filter(t => t.estado === 'pendiente');
+    this.enProgreso = this.filteredTickets.filter(t => t.estado === 'en progreso');
+    this.revision = this.filteredTickets.filter(t => t.estado === 'revision');
+    this.finalizados = this.filteredTickets.filter(t => t.estado === 'finalizado');
   }
 
   onDrop(event: CdkDragDrop<Ticket[]>) {
     if (!this.authService.hasPermission('move_kanban')) return;
 
     if (event.previousContainer === event.container) {
-      // Same list, do nothing or reorder if needed
       return;
     } else {
-      // Transfer to new list
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex
       );
-      // Update the ticket's estado
+      
       const ticket = event.container.data[event.currentIndex];
       const estadoMap: Record<string, Ticket['estado']> = {
         pendientes: 'pendiente',
@@ -148,12 +143,19 @@ export class GroupViewComponent implements OnInit {
       const newEstado = estadoMap[event.container.id];
       if (newEstado) {
         ticket.estado = newEstado;
-        this.ticketService.updateTicket(ticket);
+        
+        // Aquí deberías tener un método en tu servicio para actualizar solo el estado (PATCH)
+        // Por ahora usamos tu método updateTicket
+        this.ticketService.updateTicket(ticket).subscribe({
+          next: () => console.log('Estado actualizado en BD'),
+          error: (err: any) => console.error('Error actualizando estado', err)
+        });
       }
     }
   }
 
   applyFilter() {
+    // Ojo: Asegúrate que getCurrentUser te devuelva los datos de tu JWT
     const currentUser = this.authService.getCurrentUser();
     switch (this.selectedFilter) {
       case 'mine':
@@ -182,9 +184,13 @@ export class GroupViewComponent implements OnInit {
 
   saveTicket() {
     if (this.selectedTicket) {
-      this.ticketService.updateTicket(this.selectedTicket);
-      this.loadTickets();
-      this.displayDialog = false;
+      this.ticketService.updateTicket(this.selectedTicket).subscribe({
+        next: () => {
+          this.loadTickets(); // Recargamos para ver los cambios
+          this.displayDialog = false;
+        },
+        error: (err: any) => console.error('Error guardando ticket', err)
+      });
     }
   }
 

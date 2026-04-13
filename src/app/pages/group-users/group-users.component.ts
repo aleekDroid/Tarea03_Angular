@@ -8,7 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 
-import { GroupUserService } from '../../services/group-user.service';
+import { GroupService } from '../../services/group.service';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 
@@ -24,73 +24,75 @@ import { UserService } from '../../services/user.service';
   ],
   templateUrl:'./group-users.component.html'
 })
-export class GroupUsersComponent implements OnInit{
+export class GroupUsersComponent implements OnInit {
 
-  groupId!:number
+  groupId!: string; 
 
-  users:any[]=[]
-  groupUsers:any[]=[]
+  users: any[] = [];
+  groupUsers: any[] = [];
 
-  selectedUser:any
+  selectedUser: any;
 
   constructor(
     private route: ActivatedRoute,
-    private groupUserService: GroupUserService,
+    private groupService: GroupService, 
     private userService: UserService,
     public authService: AuthService,
     private router: Router
   ){}
 
   ngOnInit(){
-
-    this.groupId =
-      Number(this.route.snapshot.paramMap.get('id'))
+    // Tomamos el ID como texto
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.groupId = id;
+    }
 
     if (!this.authService.hasPermission('manage_users')) {
       this.router.navigate(['/home']);
       return;
     }
 
-    this.users = this.userService.getUsers()
+    this.userService.getUsers().subscribe({
+      next: (data) => {
+        this.users = data; 
+      },
+      error: (err) => console.error('Error cargando usuarios', err)
+    });
 
-    this.loadGroupUsers()
-
+    this.loadGroupUsers();
   }
 
   loadGroupUsers(){
-
-    const ids =
-      this.groupUserService.getUsersByGroup(this.groupId)
-
-    this.groupUsers =
-      ids.map((id:number)=> this.userService.getUserById(id))
-
+    // Llamada real al microservicio
+    this.groupService.getGroupMembers(this.groupId).subscribe({
+      next: (members) => {
+        this.groupUsers = members;
+      },
+      error: (err) => console.error('Error cargando miembros', err)
+    });
   }
 
   addUser(){
+    if(!this.selectedUser) return;
 
-    if(!this.selectedUser) return
-
-    this.groupUserService.addUserToGroup(
-      this.groupId,
-      this.selectedUser.id
-    )
-
-    this.loadGroupUsers()
-
-    this.selectedUser=null
-
+    // Llamada de red para agregar usuario
+    this.groupService.addUserToGroup(this.groupId, this.selectedUser.id).subscribe({
+      next: () => {
+        this.loadGroupUsers(); 
+        this.selectedUser = null;
+      },
+      error: (err) => console.error('Error al agregar usuario', err)
+    });
   }
 
-  removeUser(user:any){
-
-    this.groupUserService.removeUserFromGroup(
-      this.groupId,
-      user.id
-    )
-
-    this.loadGroupUsers()
-
+  removeUser(user: any){
+    // Llamada de red para remover usuario
+    this.groupService.removeUserFromGroup(this.groupId, user.id).subscribe({
+      next: () => {
+        this.loadGroupUsers(); 
+      },
+      error: (err) => console.error('Error al remover usuario', err)
+    });
   }
-
 }
