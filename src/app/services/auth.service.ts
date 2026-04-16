@@ -1,6 +1,6 @@
 // src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { UserService, User } from './user.service';
 
@@ -8,18 +8,19 @@ import { UserService, User } from './user.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3001/auth';
+  private apiUrl = 'http://localhost:4000/auth';
 
   constructor(
     private http: HttpClient,
     private userService: UserService
   ) {}
 
-  login(username: string, password: string): Observable<any> {
+login(username: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { username, password }).pipe(
-      tap((response: any) => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('currentUser', JSON.stringify(response.user));
+      map((response: any) => response.data), 
+      tap((data: any) => {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
       })
     );
   }

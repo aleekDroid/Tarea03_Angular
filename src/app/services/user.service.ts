@@ -1,7 +1,7 @@
 // src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 export interface User {
   id: string; 
@@ -15,9 +15,8 @@ export interface User {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3002/users';
+  private apiUrl = 'http://localhost:4000/users';
 
-  // Esta lista se queda para construir las columnas de la tabla
   private availablePermissions: string[] = [
     'view',
     'move_kanban',
@@ -30,7 +29,9 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any>(this.apiUrl).pipe(
+      map(response => response.data) 
+    );
   }
 
   getAvailablePermissions(): string[] {
@@ -38,6 +39,8 @@ export class UserService {
   }
 
   updateUserPermissions(userId: string, permisos: string[]): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${userId}/permissions`, { permisos });
+    return this.http.patch<any>(`${this.apiUrl}/${userId}/permissions`, { permisos }).pipe(
+      map(response => response.data)
+    );
   }
 }

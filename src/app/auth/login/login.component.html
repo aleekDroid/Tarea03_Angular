@@ -6,43 +6,42 @@
 
     <ng-template pTemplate="header">
       <div class="auth-header">
-        <h2>Iniciar Sesión</h2>
+        <div class="brand-logo">
+          <i class="pi pi-box"></i>
+        </div>
+        <h2>ERP Aleek</h2>
+        <p class="subtitle">Ingresa tus credenciales para continuar</p>
       </div>
     </ng-template>
 
     <div class="auth-form">
 
       <div class="p-field">
-        <label>Email</label>
-        <br>
-
-        <span class="p-input-icon-left">
+        <label>Correo Electrónico</label>
+        <span class="p-input-icon-left w-full">
           <i class="pi pi-envelope"></i>
-
-          <input pInputText [(ngModel)]="email" type="email" placeholder="correo@ejemplo.com" style="width:100%"
-            [disabled]="loading" />
-
+          <input pInputText [(ngModel)]="email" type="email" placeholder="correo@ejemplo.com" class="w-full-input" [disabled]="loading" />
         </span>
       </div>
 
-
       <div class="p-field">
         <label>Contraseña</label>
-        <br>
-
-        <p-password [(ngModel)]="password" [feedback]="false" toggleMask="true" placeholder="Contraseña"
-          styleClass="w-full" [disabled]="loading"></p-password>
-
+        <p-password 
+          [(ngModel)]="password" 
+          [feedback]="false" 
+          [toggleMask]="true" 
+          placeholder="Tu contraseña"
+          styleClass="w-full-password" 
+          [style]="{'width':'100%'}" 
+          [inputStyle]="{'width':'100%'}" 
+          [disabled]="loading">
+        </p-password>
       </div>
-
-
-      <p-button label="Iniciar Sesión" icon="pi pi-sign-in" (click)="login()" [loading]="loading"
-        styleClass="w-full"></p-button>
-
+      <p-button label="Iniciar Sesión" icon="pi pi-sign-in" (click)="login()" [loading]="loading" styleClass="w-full p-button-success mt-3"></p-button>
 
       <p class="auth-link">
         ¿No tienes cuenta?
-        <a routerLink="/register">Regístrate</a>
+        <a routerLink="/register">Regístrate aquí</a>
       </p>
 
     </div>

@@ -1,12 +1,12 @@
+// src/app/services/ticket.service.ts
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs'; 
 import { Ticket } from '../models/ticket.model';
 
 @Injectable({ providedIn: 'root' })
 export class TicketService {
-  // Apuntamos DIRECTAMENTE al microservicio Fastify de tickets
-  private apiUrl = 'http://localhost:3003/tickets';
+  private apiUrl = 'http://localhost:4000/tickets';
 
   constructor(private http: HttpClient) {}
 
@@ -15,24 +15,31 @@ export class TicketService {
     if (groupId) {
       params = params.set('groupId', groupId);
     }
-    return this.http.get<Ticket[]>(this.apiUrl, { params });
+    return this.http.get<any>(this.apiUrl, { params }).pipe(
+      map(response => response.data)
+    );
   }
 
-  // Esta es la pieza clave que hace el PATCH para guardar los cambios
   updateTicket(ticket: Ticket): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${ticket.id}`, ticket);
+    return this.http.patch<any>(`${this.apiUrl}/${ticket.id}`, ticket).pipe(
+      map(response => response.data)
+    );
   }
-  // Renombramos esto para que el dashboard no marque error
+
   getTicketsByGroup(groupId: string): Observable<Ticket[]> {
     return this.getTickets(groupId);
   }
 
   createTicket(ticket: Ticket): Observable<any> {
-    return this.http.post(this.apiUrl, ticket);
+    return this.http.post<any>(this.apiUrl, ticket).pipe(
+      map(response => response.data)
+    );
   }
 
   getTicketsByAssignedUser(username: string): Observable<Ticket[]> {
     let params = new HttpParams().set('assignedUserId', username);
-    return this.http.get<Ticket[]>(this.apiUrl, { params });
+    return this.http.get<any>(this.apiUrl, { params }).pipe(
+      map(response => response.data)
+    );
   }
 }

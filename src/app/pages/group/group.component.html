@@ -6,7 +6,7 @@
   <div class="header">
     <h2>Gestión de Grupos</h2>
 
-    <button *ngIf="authService.hasPermission('create_group')" pButton label="Nuevo Grupo" icon="pi pi-plus" (click)="openNew()">
+    <button *appHasPermission="'create_group'" pButton label="Nuevo Grupo" icon="pi pi-plus" (click)="openNew()">
     </button>
   </div>
 
@@ -20,7 +20,6 @@
         <th>Nivel</th>
         <th>Autor</th>
         <th>Miembros</th>
-        <th>Tickets</th>
         <th>Acciones</th>
       </tr>
     </ng-template>
@@ -43,7 +42,6 @@
 
         <td>{{group.miembros}}</td>
 
-        <td>{{group.tickets}}</td>
 
         <td class="actions">
 
@@ -54,8 +52,8 @@
             <ng-template pTemplate="content">
               <div class="menu-items">
                 <button pButton label="Ver Tickets" icon="pi pi-ticket" (click)="openGroupTickets(group); op.hide()"></button>
-                <button *ngIf="authService.hasPermission('create_group')" pButton label="Editar" icon="pi pi-pencil" (click)="editGroup(group); op.hide()"></button>
-                <button *ngIf="authService.hasPermission('manage_users')" pButton label="Ver Usuarios" icon="pi pi-users" (click)="manageGroup(group); op.hide()"></button>
+                <button *appHasPermission="'create_group'" pButton label="Editar" icon="pi pi-pencil" (click)="editGroup(group); op.hide()"></button>
+                <button *appHasPermission="'manage_users'" pButton label="Ver Usuarios" icon="pi pi-users" (click)="manageGroup(group); op.hide()"></button>
               </div>
             </ng-template>
           </p-overlayPanel>
@@ -74,17 +72,20 @@
 
   <div class="form">
 
-    <input pInputText [(ngModel)]="selectedGroup.nombre" placeholder="Nombre">
+    <label for="nombre">Nombre</label>
+    <input pInputText [(ngModel)]="selectedGroup.nombre" placeholder="Ingresa el nombre del grupo">
 
-    <input pInputText [(ngModel)]="selectedGroup.categoria" placeholder="Categoría">
+    <label for="categoria">Categoría</label>
+    <input pInputText [(ngModel)]="selectedGroup.categoria" placeholder="Categoría del grupo">
 
-    <input pInputText [(ngModel)]="selectedGroup.nivel" placeholder="Nivel">
+    <label for="nivel">Nivel</label>
+    <input pInputText [(ngModel)]="selectedGroup.nivel" placeholder="Nivel del grupo">
 
-    <input pInputText [(ngModel)]="selectedGroup.creador_nombre" placeholder="Autor">
+    <label for="creador_nombre">Autor</label>
+    <input pInputText [(ngModel)]="selectedGroup.creador_nombre" placeholder="Autor del grupo">
 
-    <input pInputText type="number" [(ngModel)]="selectedGroup.miembros" placeholder="Miembros">
-
-    <input pInputText type="number" [(ngModel)]="selectedGroup.tickets" placeholder="Tickets">
+    <label for="miembros">Miembros</label>
+    <input pInputText type="number" [(ngModel)]="selectedGroup.miembros" placeholder="Miembros del grupo">
 
     <button pButton label="Guardar" icon="pi pi-check" (click)="saveGroup()">
     </button>

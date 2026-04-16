@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HasPermissionDirective } from '../../directives/has-permission.directive';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +21,8 @@ import { UserService } from '../../services/user.service';
     FormsModule,
     TableModule,
     ButtonModule,
-    DropdownModule
+    DropdownModule,
+    HasPermissionDirective
   ],
   templateUrl:'./group-users.component.html'
 })

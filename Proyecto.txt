@@ -1,2 +1,5 @@
+Repostorio Bakcend:
 https://github.com/aleekDroid/ERP_Aleek_Backend.git
 
+Repostorio Frontend:
+https://github.com/aleekDroid/ERP_Aleek_Backend.git

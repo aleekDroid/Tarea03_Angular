@@ -2,7 +2,7 @@
 
     <h2>Usuarios del grupo</h2>
 
-    <div class="add-user" *ngIf="authService.hasPermission('manage_users')">
+    <div class="add-user" *appHasPermission="'manage_users'">
         <p-dropdown [options]="users" optionLabel="username" [(ngModel)]="selectedUser" placeholder="Seleccionar usuario">
         </p-dropdown>
 
@@ -16,7 +16,7 @@
         <ng-template pTemplate="header">
             <tr>
                 <th>Nombre</th>
-                <th>Email</th>
+                <th>Correo</th>
                 <th>Acciones</th>
             </tr>
         </ng-template>
@@ -24,9 +24,9 @@
         <ng-template pTemplate="body" let-user>
             <tr>
                 <td>{{ user?.nombre_completo || user?.username }}</td>
-                <td>{{ user?.correo }}</td>
+                <td>{{ user?.email }}</td>
 
-                <td *ngIf="authService.hasPermission('manage_users')">
+                <td *appHasPermission="'manage_users'">
                     <button pButton icon="pi pi-trash" severity="danger" (click)="removeUser(user)">
                     </button>
                 </td>

@@ -1,3 +1,4 @@
+// src/app/services/dashboard.service.ts
 import { Injectable } from '@angular/core';
 import { TicketService } from './ticket.service';
 import { UserService } from './user.service';

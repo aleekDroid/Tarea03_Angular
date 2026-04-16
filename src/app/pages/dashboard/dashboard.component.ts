@@ -16,6 +16,7 @@ import { TicketService } from '../../services/ticket.service';
 import { Ticket } from '../../models/ticket.model';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { HasPermissionDirective } from '../../directives/has-permission.directive';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,7 +32,8 @@ import { UserService } from '../../services/user.service';
     InputTextarea,
     CalendarModule,
     SelectButtonModule,
-    FormsModule
+    FormsModule,
+    HasPermissionDirective
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
