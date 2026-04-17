@@ -33,7 +33,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
 
-  email: string = '';
+  username: string = '';
   password: string = '';
   loading: boolean = false;
 
@@ -44,14 +44,14 @@ export class LoginComponent {
   ) {}
 
 login(): void {
-    if (!this.email || !this.password) {
+    if (!this.username || !this.password) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Por favor completa todos los campos' });
       return;
     }
 
     this.loading = true;
 
-    this.authService.login(this.email, this.password).subscribe({
+    this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
         this.loading = false;
         
@@ -66,7 +66,7 @@ login(): void {
       },
       error: (err: any) => {
         this.loading = false;
-        const mensajeReal = err.error?.message || 'Error de conexión con el servidor';
+        const mensajeReal = err.error?.data?.error || 'Error de conexión con el servidor';
         this.messageService.add({ severity: 'error', summary: 'Error', detail: mensajeReal });
       }
     });
