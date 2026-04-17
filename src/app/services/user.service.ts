@@ -16,7 +16,7 @@ export interface User {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = `${environment.apiUrl}/api/users`;
+  private apiUrl = `${environment.apiUrl}/users`;
 
   private availablePermissions: string[] = [
     'view',
