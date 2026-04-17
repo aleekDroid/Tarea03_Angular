@@ -4,8 +4,8 @@ import { HttpInterceptorFn } from '@angular/common/http';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('token');
 
-  console.log('Interceptando URL:', req.url);
-  console.log('Token encontrado:', token);
+  // console.log('Interceptando URL:', req.url);
+  // console.log('Token encontrado:', token);
 
   if (token) {
     const peticionClonada = req.clone({
