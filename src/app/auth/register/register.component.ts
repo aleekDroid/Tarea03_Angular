@@ -10,6 +10,8 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
+import { AuthService } from '../../services/auth.service'; 
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -42,15 +44,14 @@ export class RegisterComponent {
 
   constructor(
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService // Inyectamos tu servicio para conectar con Render
   ) {}
 
   register() {
-
     this.loading = true;
 
-    /* VALIDACIÓN CAMPOS VACÍOS */
-
+    /* 1. VALIDACIÓN CAMPOS VACÍOS */
     if (
       !this.nombres ||
       !this.apellidoPaterno ||
@@ -66,87 +67,75 @@ export class RegisterComponent {
       return;
     }
 
-    /* VALIDAR QUE NOMBRES Y APELLIDOS NO TENGAN ESPACIOS */
-
+    /* 2. VALIDAR QUE NOMBRES Y APELLIDOS NO TENGAN ESPACIOS */
     const noSpacesRegex = /^[^\s]+$/;
-
     if (!noSpacesRegex.test(this.nombres)) {
       this.error('El nombre no puede contener espacios');
       return;
     }
-
     if (!noSpacesRegex.test(this.apellidoPaterno)) {
       this.error('El apellido paterno no puede contener espacios');
       return;
     }
-
     if (!noSpacesRegex.test(this.apellidoMaterno)) {
       this.error('El apellido materno no puede contener espacios');
       return;
     }
 
-    /* VALIDAR TELÉFONO (10 números exactos) */
-
+    /* 3. VALIDAR TELÉFONO (10 números exactos) */
     const phoneRegex = /^[0-9]{10}$/;
-
     if (!phoneRegex.test(this.telefono)) {
       this.error('El teléfono debe tener exactamente 10 números');
       return;
     }
 
-    /* VALIDAR EDAD ENTERA */
-
+    /* 4. VALIDAR EDAD ENTERA */
     if (!Number.isInteger(Number(this.edad))) {
       this.error('La edad debe ser un número entero');
       return;
     }
 
-    /* VALIDAR PASSWORD */
-
+    /* 5. VALIDAR PASSWORD */
     if (this.password !== this.confirmPassword) {
       this.error('Las contraseñas no coinciden');
       return;
     }
 
-    /* VALIDAR EMAIL DUPLICADO */
-
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-
-    const exists = users.find((u: any) => u.email === this.email);
-
-    if (exists) {
-      this.error('Ya existe una cuenta con este correo');
-      return;
-    }
-
-    /* CREAR USUARIO */
+    /* 6. CREAR JSON PARA EL BACKEND (NEON POSTGRES) */
+    // Juntamos los nombres para el campo 'nombre_completo' que pide la BD
+    const nombreCompleto = `${this.nombres} ${this.apellidoPaterno} ${this.apellidoMaterno}`.trim();
+    
+    // Creamos un username automático usando lo que está antes del @ en el correo
+    const usernameGenerado = this.email.split('@')[0];
 
     const newUser = {
-      nombres: this.nombres,
-      apellidoPaterno: this.apellidoPaterno,
-      apellidoMaterno: this.apellidoMaterno,
       email: this.email,
+      username: usernameGenerado,
       password: this.password,
-      telefono: this.telefono,
-      direccion: this.direccion,
-      edad: Number(this.edad)
+      nombre_completo: nombreCompleto
     };
 
-    users.push(newUser);
+    /* 7. ENVIAR DATOS A RENDER (NUBE) */
+    this.authService.register(newUser).subscribe({
+      next: (respuesta) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Registro exitoso',
+          detail: 'La cuenta fue creada correctamente en la base de datos'
+        });
 
-    localStorage.setItem('users', JSON.stringify(users));
-
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Registro exitoso',
-      detail: 'La cuenta fue creada correctamente'
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 1200);
+        
+        this.loading = false;
+      },
+      error: (err) => {
+        // Mostramos el error exacto que nos devuelva NestJS o la Base de Datos
+        const mensajeError = err.error?.data?.error || 'No se pudo conectar con el servidor';
+        this.error('Error: ' + mensajeError);
+      }
     });
-
-    setTimeout(() => {
-      this.router.navigate(['/login']);
-    }, 1200);
-
-    this.loading = false;
   }
 
   error(msg: string) {
@@ -155,8 +144,6 @@ export class RegisterComponent {
       summary: 'Error',
       detail: msg
     });
-
     this.loading = false;
   }
-
 }
