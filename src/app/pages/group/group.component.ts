@@ -14,6 +14,7 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 import { Group } from '../../models/group.model';
 import { GroupService } from '../../services/group.service';
+import { HasPermissionDirective } from '../../directives/has-permission.directive';
 
 @Component({
   selector: 'app-group',
@@ -27,7 +28,8 @@ import { GroupService } from '../../services/group.service';
     InputTextModule,
     ToastModule,
     TagModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    HasPermissionDirective
   ],
   providers: [MessageService],
   templateUrl: './group.component.html',
